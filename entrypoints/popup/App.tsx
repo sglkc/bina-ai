@@ -1,10 +1,12 @@
 import { useState } from 'preact/hooks'
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
+  const process = () => chrome.runtime.sendMessage('process')
 
   return (
     <>
+      <button class="bg-red p-16 fw-bold" onClick={process}>PROCESS!</button>
       <div>
         <a href="https://wxt.dev" target="_blank">
         </a>
