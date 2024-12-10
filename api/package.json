@@ -12,8 +12,10 @@
   "author": "sglkc",
   "license": "MIT",
   "dependencies": {
+    "@types/html-minifier": "^4.0.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "html-minifier": "^4.0.0",
     "htmlnano": "^2.1.1"
   },
   "devDependencies": {

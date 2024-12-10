@@ -1,27 +1,24 @@
 function processPage() {
+  const dom = new DOMParser().parseFromString(document.body.outerHTML, 'text/html')
   const includeAttributes = ['href', 'alt', 'title', 'role', 'src', 'id', 'name', 'aria']
-  const excludeTags = ['script', 'style', 'link', 'svg']
+  const excludeTags = ['script', 'style', 'link', 'svg', 'iframe', 'noscript']
 
   const removeUnimportantAttributes = (element: Element) => {
-    // Get all attributes of the element
-    const attributes = element.attributes;
+    const attributes = element.attributes
 
-    // Iterate over the attributes in reverse order to avoid issues with live attribute lists
     for (let i = attributes.length - 1; i >= 0; i--) {
-      const attribute = attributes[i];
+      const attribute = attributes[i]
 
-      // Check if the attribute name is not in the list of important attributes
       if (!includeAttributes.includes(attribute.name)) {
-        // Remove the attribute
-        element.removeAttribute(attribute.name);
+        element.removeAttribute(attribute.name)
       }
     }
   }
 
-  document.querySelectorAll(excludeTags.join()).forEach((elm) => elm.remove())
-  document.querySelectorAll('*').forEach(removeUnimportantAttributes)
+  dom.querySelectorAll(excludeTags.join()).forEach((elm) => elm.remove())
+  dom.querySelectorAll('*').forEach(removeUnimportantAttributes)
 
-  return document.body.outerHTML
+  return dom.body.outerHTML
 }
 
 export default defineBackground(() => {
@@ -38,6 +35,15 @@ export default defineBackground(() => {
     })
 
     console.info(result.result)
+
+    const res = await fetch('http://localhost:5000/nano', {
+      method: 'post',
+      body: result.result
+    })
+
+    const html = await res.text()
+
+    console.log(html)
   })
 
   console.log('Hello background!', { id: browser.runtime.id });
