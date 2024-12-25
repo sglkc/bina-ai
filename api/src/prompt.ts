@@ -2,48 +2,37 @@ import { Mistral } from '@mistralai/mistralai'
 import { UsageInfo } from '@mistralai/mistralai/models/components'
 
 export interface PromptBody {
-  type: 'html' | 'markdown'
-  page: string
-  question: string
+  type?: 'html' | 'markdown'
+  page?: string
+  question?: string
 }
 
 export interface PromptResponse {
+  intent: string
   answer: string
-  target: string
+  target?: string
   usage: UsageInfo
 }
 
 const apiKey = process.env.MISTRAL_API_KEY
+const agentId = process.env.MISTRAL_AGENT_ID!
 const client = new Mistral({ apiKey })
 
-export default async function prompt({
-  type,
-  page,
-  question,
-}: PromptBody): Promise<PromptResponse> {
+export default async function prompt({ type, page, question }: PromptBody): Promise<PromptResponse> {
   const start = Date.now()
 
   console.info('generating message')
 
-  const content =
-`You are an AI who browse the web, you
-\`\`\`${type}
-${page}
-\`\`\`
+  const markdown = '```' + type + '\n'
+    + page + '\n'
+    + '```' + '\n'
 
-Output your answer in a JSON format of with the following schema:
+  const content = (page ? markdown : '') + (question ? 'Question: ' + question.trim() : '')
 
-\`\`\`
-{
-  "answer": "Your answer towards the question",
-  "target": "Target url, set null if none"
-}
-\`\`\`
+  console.log(content)
 
-${question}
-`
-  const response = await client.chat.complete({
-    model: 'mistral-large-latest',
+  const response = await client.agents.complete({
+    agentId,
     messages: [
       { role: 'user', content }
     ],
@@ -55,9 +44,10 @@ ${question}
   console.info('generated message in', Date.now() - start)
   console.info('token usage', response.usage)
 
-  const { answer, target } = JSON.parse(response.choices![0].message.content as string)
+  const { intent, answer, target } = JSON.parse(response.choices![0].message.content as string)
 
   return {
+    intent,
     answer,
     target,
     usage: response.usage

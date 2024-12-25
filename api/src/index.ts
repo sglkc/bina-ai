@@ -10,23 +10,28 @@ app.use(express.text())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.post('/prompt', async (req: Request<{}, {}, PromptBody>, res) => {
+app.post('/prompt', async (
+  req: Request<{}, PromptResponse | { message: string }, PromptBody>,
+  res
+) => {
   const { body } = req
 
   if (!('type' in body && 'page' in body && 'question' in body)) {
     res.status(400).json({
-      message: 'body schema must have type, page, question'
+      message: 'json must have (type, page) or (question) or both'
     })
     return
   }
-
 
   const response = await prompt(req.body)
 
   res.json(response)
 })
 
-app.post('/minifier', async (req: Request<{}, string, string, { iter?: number }>, res) => {
+app.post('/minifier', async (
+  req: Request<{}, string, string, { iter?: number }>,
+  res
+) => {
   const iter = Number(req.query.iter ?? 2)
 
   if (!req.is('text/*')) {
