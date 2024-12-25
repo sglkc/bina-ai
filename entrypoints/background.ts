@@ -18,6 +18,16 @@ function processPage() {
   dom.querySelectorAll(excludeTags.join()).forEach((elm) => elm.remove())
   dom.querySelectorAll('*').forEach(removeUnimportantAttributes)
 
+  for (const element of dom.body.children) {
+    for (const child of element.children) {
+      if (!child.childNodes.length || !child.textContent?.trim()) {
+        element.remove()
+        continue
+      }
+      dom.body.appendChild(child)
+    }
+  }
+
   return dom.body.outerHTML
 }
 
@@ -34,9 +44,9 @@ export default defineBackground(() => {
       func: processPage
     })
 
-    console.info(result.result)
+    console.log(result.result)
 
-    const res = await fetch('http://localhost:5000/nano', {
+    const res = await fetch('http://localhost:5000/minifier', {
       method: 'post',
       body: result.result
     })
@@ -46,5 +56,5 @@ export default defineBackground(() => {
     console.log(html)
   })
 
-  console.log('Hello background!', { id: browser.runtime.id });
-});
+  console.log('Hello background!', { id: browser.runtime.id })
+})

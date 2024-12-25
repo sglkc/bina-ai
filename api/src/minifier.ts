@@ -47,10 +47,14 @@ function useNano(html: string): Promise<string> {
 }
 
 export default async function minifyHtml(html: string): Promise<string> {
+  console.info('minifying html length:', html.length)
+
   const [minifier, nano] = await Promise.all([
     useMinifier(html),
     useNano(html)
   ])
+
+  console.info('mini:', minifier.length, 'nano:', nano.length)
 
   return minifier.length > nano.length ? nano : minifier
 }
