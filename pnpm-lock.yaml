@@ -14,6 +14,9 @@ importers:
       '@unocss/reset':
         specifier: ^0.65.1
         version: 0.65.1
+      dom-to-semantic-markdown:
+        specifier: ^1.2.14
+        version: 1.2.14
       preact:
         specifier: ^10.25.1
         version: 10.25.1
@@ -1316,6 +1319,9 @@ packages:
 
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
+
+  dom-to-semantic-markdown@1.2.14:
+    resolution: {integrity: sha512-U+yjJeJyTjO/TwHrSD/CbB6xZxZ6SlDzmjp06ZcraWzwPOowLurEQO+I85pHu2WKwfmRxqkrn6IR/bXD186KJg==}
 
   domelementtype@2.3.0:
     resolution: {integrity: sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==}
@@ -3965,6 +3971,8 @@ snapshots:
       domelementtype: 2.3.0
       domhandler: 5.0.3
       entities: 4.5.0
+
+  dom-to-semantic-markdown@1.2.14: {}
 
   domelementtype@2.3.0: {}
 
