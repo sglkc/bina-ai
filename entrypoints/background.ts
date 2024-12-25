@@ -11,18 +11,20 @@ export default defineBackground(() => {
       files: ['content-scripts/markdown.js']
     })
 
-    const md = result.result
+    const page = result.result
 
-    console.log(md)
+    const res = await fetch('http://localhost:5000/prompt', {
+      method: 'post',
+      body: JSON.stringify({
+        type: 'markdown',
+        question: '',
+        page
+      })
+    })
 
-    // const res = await fetch('http://localhost:5000/minifier', {
-    //   method: 'post',
-    //   body: result.result
-    // })
-    //
-    // const html = await res.text()
-    //
-    // console.log(html)
+    const json = await res.json()
+
+    console.log(json)
   })
 
   console.log('Hello background!', { id: browser.runtime.id })
