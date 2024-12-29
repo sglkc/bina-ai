@@ -1,31 +1,27 @@
-import { useState } from 'preact/hooks'
+import { useRef } from 'preact/hooks'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const process = () => chrome.runtime.sendMessage('process')
+  const input = useRef<HTMLTextAreaElement>(null)
+  const process = () => chrome.runtime.sendMessage({
+    type: 'prompt',
+    question: input.current!.value
+  })
 
   return (
-    <>
-      <button class="bg-red p-16 fw-bold" onClick={process}>PROCESS!</button>
-      <div>
-        <a href="https://wxt.dev" target="_blank">
-        </a>
-        <a href="https://react.dev" target="_blank">
-        </a>
-      </div>
-      <h1>WXT + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the WXT and React logos to learn more
-      </p>
-    </>
+    <div class="h-full w-full">
+      <textarea
+        ref={input}
+        class="b-2 b-black p-2 text-xl"
+        placeholder="Perintah atau pertanyaan"
+        rows={3}
+      />
+      <button
+        class="b-2 b-black p-8 w-full bg-red text-2xl fw-bold"
+        onClick={process}
+      >
+        GASKAN!
+      </button>
+    </div>
   );
 }
 

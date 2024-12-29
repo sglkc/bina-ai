@@ -1,7 +1,9 @@
 export default defineBackground(() => {
   chrome.runtime.onMessage.addListener(async (msg) => {
-    if (msg !== 'process') return
+    if (typeof msg !== 'object') return
+    if (msg.type !== 'prompt') return
 
+    const { question } = msg as { type: 'prompt', question: string }
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
 
     if (!tab.id) return
@@ -15,9 +17,12 @@ export default defineBackground(() => {
 
     const res = await fetch('http://localhost:5000/prompt', {
       method: 'post',
+      headers: {
+        'content-type': 'application/json'
+      },
       body: JSON.stringify({
         type: 'markdown',
-        question: '',
+        question,
         page
       })
     })
