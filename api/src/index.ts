@@ -16,9 +16,9 @@ app.post('/prompt', async (
 ) => {
   const { body } = req
 
-  if (!('type' in body && 'page' in body && 'question' in body)) {
+  if (!('url' in body && 'page' in body && 'prompt' in body)) {
     res.status(400).json({
-      message: 'json must have (type, page) or (question) or both'
+      message: 'json must have url, page, or prompt'
     })
     return
   }

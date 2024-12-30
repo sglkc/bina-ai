@@ -1,19 +1,34 @@
+interface PromptMessage {
+  type: 'prompt'
+  prompt?: string
+  reset?: boolean
+}
+
+interface PromptResponse {
+  session: string
+  intent: string
+  action: string
+  target?: string
+}
+
 export default defineBackground(() => {
-  chrome.runtime.onMessage.addListener(async (msg) => {
-    if (typeof msg !== 'object') return
-    if (msg.type !== 'prompt') return
+  let session: string | undefined
 
-    const { question } = msg as { type: 'prompt', question: string }
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+  chrome.runtime.onMessage.addListener(async (msg: PromptMessage) => {
+    if (typeof msg !== 'object' || msg.type !== 'prompt') return
+    if (msg.reset) return void (session = undefined)
 
-    if (!tab.id) return
+    const { prompt } = msg
+    const [{ url, id: tabId }] = await chrome.tabs.query({ active: true, currentWindow: true })
 
-    const [result] = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
+    if (!tabId) return
+
+    const [injection] = await chrome.scripting.executeScript({
+      target: { tabId },
       files: ['content-scripts/markdown.js']
     })
 
-    const page = result.result
+    const page = injection.result
 
     const res = await fetch('http://localhost:5000/prompt', {
       method: 'post',
@@ -21,15 +36,17 @@ export default defineBackground(() => {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
-        type: 'markdown',
-        question,
+        session,
+        url,
+        prompt,
         page
       })
     })
 
-    const json = await res.json()
+    const json: PromptResponse = await res.json()
+    session = json.session
 
-    console.log(json)
+    console.info(JSON.stringify(json, null, 1))
   })
 
   console.log('Hello background!', { id: browser.runtime.id })
