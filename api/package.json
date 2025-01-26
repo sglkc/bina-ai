@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "tsx watch --clear-screen=false src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "tsc --noEmit"
   },
   "keywords": [],
   "author": "sglkc",

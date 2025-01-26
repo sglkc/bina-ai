@@ -1,7 +1,10 @@
 import 'dotenv/config'
-import express, { Request } from 'express'
+import { randomUUID } from 'node:crypto'
+import express from 'express'
 import minifyHtml from './minifier'
-import prompt, { PromptBody, PromptResponse } from './prompt'
+import prompt, { parsePrompt } from './prompt'
+import { MinifierEndpointRequest, PromptEndpointRequest } from './types'
+import { getMessages } from './message'
 
 const PORT = process.env.PORT ?? 5000
 const app = express()
@@ -10,28 +13,29 @@ app.use(express.text())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.post('/prompt', async (
-  req: Request<{}, PromptResponse | { message: string }, PromptBody>,
-  res
-) => {
-  const { body } = req
-
-  if (!('url' in body && 'page' in body && 'prompt' in body)) {
-    res.status(400).json({
-      message: 'json must have url, page, or prompt'
-    })
+app.post('/prompt', async (req: PromptEndpointRequest, res) => {
+  if (!req.is('application/json')) {
+    res.status(400).json({ message: 'content type must be json' })
     return
   }
 
-  const response = await prompt(req.body)
+  const body = req.body
+
+  if (!body.url || !body.page || !body.prompt) {
+    res.status(400).json({ message: 'json must have url or page or prompt' })
+    return
+  }
+
+  const session = body.session ?? randomUUID()
+  const messages = getMessages(session)
+  const content = parsePrompt(body)
+  const response = await prompt(content, messages)
 
   res.json(response)
+  return
 })
 
-app.post('/minifier', async (
-  req: Request<{}, string, string, { iter?: number }>,
-  res
-) => {
+app.post('/minifier', async (req: MinifierEndpointRequest, res) => {
   const iter = Number(req.query.iter ?? 2)
 
   if (!req.is('text/*')) {
@@ -46,6 +50,7 @@ app.post('/minifier', async (
   }
 
   res.send(html)
+  return
 })
 
 app.listen(PORT, () => {
