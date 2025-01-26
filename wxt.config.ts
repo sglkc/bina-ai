@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { preact } from '@preact/preset-vite'
 import { defineConfig } from 'wxt'
 
@@ -12,6 +13,11 @@ export default defineConfig({
   vite: () => ({
     plugins: [
       preact(),
-    ]
+    ],
+    resolve: {
+      alias: {
+        '@utils': path.resolve(__dirname, './utils')
+      }
+    }
   })
 })
