@@ -1,59 +1,42 @@
-import executeAction, { Action } from "./action"
+import { PromptMessage } from '@utils/types'
+import { getAction, getActionRunner } from '@utils/runner'
 
-interface PromptMessage {
-  type: 'prompt'
-  prompt?: string
-  reset?: boolean
-}
+let session: string | undefined
 
-interface PromptResponse extends Action {
-  session: string
+async function PromptRunner(msg: PromptMessage) {
+  if (msg.reset) return session = undefined
+
+  const { prompt } = msg
+  const [{ url, id: tabId }] = await chrome.tabs.query({ active: true, currentWindow: true })
+
+  if (!tabId) return
+
+  const [injection] = await chrome.scripting.executeScript<any, string>({
+    target: { tabId },
+    files: ['content-scripts/markdown.js']
+  })
+
+  const page = injection.result
+
+  const action = await getAction({ session, url, prompt, page })
+  const runner = getActionRunner(action)
+
+  session = action.session
+
+  const [execution] = await chrome.scripting.executeScript({
+    target: { tabId },
+    func: runner,
+    args: [action]
+  })
+
+  if (execution.result) {}
+
+  console.info(JSON.stringify(action, null, 1))
 }
 
 export default defineBackground(() => {
-  let session: string | undefined
-
-  chrome.runtime.onMessage.addListener(async (msg: PromptMessage) => {
-    if (typeof msg !== 'object' || msg.type !== 'prompt') return
-    if (msg.reset) return void (session = undefined)
-
-    const { prompt } = msg
-    const [{ url, id: tabId }] = await chrome.tabs.query({ active: true, currentWindow: true })
-
-    if (!tabId) return
-
-    const [injection] = await chrome.scripting.executeScript({
-      target: { tabId },
-      files: ['content-scripts/markdown.js']
-    })
-
-    const page = injection.result
-
-    const res = await fetch('http://localhost:5000/prompt', {
-      method: 'post',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        session,
-        url,
-        prompt,
-        page
-      })
-    })
-
-    const json: PromptResponse = await res.json()
-    session = json.session
-
-    const [execution] = await chrome.scripting.executeScript({
-      target: { tabId },
-      func: executeAction,
-      args: [json]
-    })
-
-    if (execution.result) {}
-
-    console.info(JSON.stringify(json, null, 1))
+  chrome.runtime.onMessage.addListener(async (msg) => {
+    if (typeof msg === 'object' && msg.type && msg.type === 'prompt') return PromptRunner(msg)
   })
 
   console.log('Hello background!', { id: browser.runtime.id })

@@ -1,17 +1,12 @@
 import { useRef } from 'preact/hooks'
+import { PromptMessage } from '@utils/types'
 
 function App() {
   const input = useRef<HTMLTextAreaElement>(null)
+  const sendMessage = (obj: Partial<PromptMessage>) => chrome.runtime.sendMessage<PromptMessage>({ ...obj, type: 'prompt' })
 
-  const resetSession = () => chrome.runtime.sendMessage({
-    type: 'prompt',
-    reset: true
-  })
-
-  const process = () => chrome.runtime.sendMessage({
-    type: 'prompt',
-    prompt: input.current!.value
-  })
+  const resetSession = () => sendMessage({ reset: true })
+  const process = () => sendMessage({ prompt: input.current!.value })
 
   return (
     <div class="h-full w-full">
