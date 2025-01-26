@@ -18,6 +18,7 @@
     "@preact/preset-vite": "^2.9.3",
     "@unocss/reset": "^0.65.1",
     "dom-to-semantic-markdown": "^1.2.14",
+    "ky": "^1.7.4",
     "preact": "^10.25.1"
   },
   "devDependencies": {

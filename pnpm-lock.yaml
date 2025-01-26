@@ -17,6 +17,9 @@ importers:
       dom-to-semantic-markdown:
         specifier: ^1.2.14
         version: 1.2.14
+      ky:
+        specifier: ^1.7.4
+        version: 1.7.4
       preact:
         specifier: ^10.25.1
         version: 10.25.1
@@ -1829,6 +1832,10 @@ packages:
 
   kolorist@1.8.0:
     resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
+
+  ky@1.7.4:
+    resolution: {integrity: sha512-zYEr/gh7uLW2l4su11bmQ2M9xLgQLjyvx58UyNM/6nuqyWFHPX5ktMjvpev3F8QWdjSsHUpnWew4PBCswBNuMQ==}
+    engines: {node: '>=18'}
 
   latest-version@7.0.0:
     resolution: {integrity: sha512-KvNT4XqAMzdcL6ka6Tl3i2lYeFDgXNCuIX+xNx6ZMVR1dFq+idXd9FLKNMOIx0t9mJ9/HudyX4oZWXZQ0UJHeg==}
@@ -4503,6 +4510,8 @@ snapshots:
   kleur@3.0.3: {}
 
   kolorist@1.8.0: {}
+
+  ky@1.7.4: {}
 
   latest-version@7.0.0:
     dependencies:
