@@ -1,14 +1,13 @@
+import executeAction, { Action } from "./action"
+
 interface PromptMessage {
   type: 'prompt'
   prompt?: string
   reset?: boolean
 }
 
-interface PromptResponse {
+interface PromptResponse extends Action {
   session: string
-  intent: string
-  action: string
-  target?: string
 }
 
 export default defineBackground(() => {
@@ -45,6 +44,14 @@ export default defineBackground(() => {
 
     const json: PromptResponse = await res.json()
     session = json.session
+
+    const [execution] = await chrome.scripting.executeScript({
+      target: { tabId },
+      func: executeAction,
+      args: [json]
+    })
+
+    if (execution.result) {}
 
     console.info(JSON.stringify(json, null, 1))
   })

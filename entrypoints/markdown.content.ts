@@ -1,4 +1,4 @@
-import { ConversionOptions, convertHtmlToMarkdown } from 'dom-to-semantic-markdown'
+import { convertHtmlToMarkdown } from 'dom-to-semantic-markdown'
 
 export default defineContentScript({
   matches: ['<all_urls>'],

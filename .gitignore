@@ -28,3 +28,7 @@ build
 *.sw?
 
 .env
+*.md
+*.txt
+*.html
+*.sqlite
