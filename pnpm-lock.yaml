@@ -23,10 +23,16 @@ importers:
       preact:
         specifier: ^10.25.1
         version: 10.25.1
+      toastify-js:
+        specifier: ^1.12.0
+        version: 1.12.0
     devDependencies:
       '@types/chrome':
         specifier: ^0.0.280
         version: 0.0.280
+      '@types/toastify-js':
+        specifier: ^1.12.3
+        version: 1.12.3
       '@wxt-dev/unocss':
         specifier: ^1.0.0
         version: 1.0.0(unocss@0.65.1(postcss@8.4.49)(rollup@4.28.1)(vite@6.0.3(@types/node@22.10.1)(jiti@1.21.6)(tsx@4.19.2))(vue@3.5.13(typescript@5.7.2)))(wxt@0.19.19(@types/node@22.10.1)(rollup@4.28.1)(tsx@4.19.2))
@@ -807,6 +813,9 @@ packages:
 
   '@types/node@22.10.1':
     resolution: {integrity: sha512-qKgsUwfHZV2WCWLAnVP1JqnpE6Im6h3Y0+fYgMTasNQ7V++CBX5OT1as0g0f+OyubbFqhf6XVNIsmN4IIhEgGQ==}
+
+  '@types/toastify-js@1.12.3':
+    resolution: {integrity: sha512-9RjLlbAHMSaae/KZNHGv19VG4gcLIm3YjvacCXBtfMfYn26h76YP5oxXI8k26q4iKXCB9LNfv18lsoS0JnFPTg==}
 
   '@types/webextension-polyfill@0.12.1':
     resolution: {integrity: sha512-xPTFWwQ8BxPevPF2IKsf4hpZNss4LxaOLZXypQH4E63BDLmcwX/RMGdI4tB4VO4Nb6xDBH3F/p4gz4wvof1o9w==}
@@ -2486,6 +2495,9 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
+  toastify-js@1.12.0:
+    resolution: {integrity: sha512-HeMHCO9yLPvP9k0apGSdPUWrUbLnxUKNFzgUoZp1PHCLploIX/4DSQ7V8H25ef+h4iO9n0he7ImfcndnN6nDrQ==}
+
   totalist@3.0.1:
     resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}
     engines: {node: '>=6'}
@@ -3370,6 +3382,8 @@ snapshots:
   '@types/node@22.10.1':
     dependencies:
       undici-types: 6.20.0
+
+  '@types/toastify-js@1.12.3': {}
 
   '@types/webextension-polyfill@0.12.1': {}
 
@@ -5203,6 +5217,8 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
+
+  toastify-js@1.12.0: {}
 
   totalist@3.0.1: {}
 

@@ -19,10 +19,12 @@
     "@unocss/reset": "^0.65.1",
     "dom-to-semantic-markdown": "^1.2.14",
     "ky": "^1.7.4",
-    "preact": "^10.25.1"
+    "preact": "^10.25.1",
+    "toastify-js": "^1.12.0"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.280",
+    "@types/toastify-js": "^1.12.3",
     "@wxt-dev/unocss": "^1.0.0",
     "typescript": "^5.6.3",
     "unocss": "^0.65.1",
