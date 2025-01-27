@@ -32,3 +32,5 @@ build
 *.txt
 *.html
 *.sqlite
+
+!entrypoints/**/*.html

@@ -119,5 +119,9 @@ export default defineBackground(() => {
 
   chrome.runtime.onMessage.addListener(messageListener)
 
-  console.log('Hello background!', { id: browser.runtime.id })
+  // ensure microphone permission for speech recognition on first install
+  chrome.runtime.onInstalled.addListener((e) => {
+    if (e.reason === chrome.runtime.OnInstalledReason.INSTALL)
+      chrome.runtime.openOptionsPage()
+  })
 })
