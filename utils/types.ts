@@ -1,5 +1,10 @@
 export interface PromptMessage {
-  type: 'prompt'
+  type: 'PROMPT'
   prompt?: string
-  reset?: boolean
 }
+
+export interface ResetMessage {
+  type: 'RESET-SESSION'
+}
+
+export type Message = PromptMessage | ResetMessage

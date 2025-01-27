@@ -1,4 +1,4 @@
-import { PromptMessage } from '@utils/types'
+import { Message, PromptMessage } from '@utils/types'
 import { getAction, getActionRunner } from '@utils/runner'
 
 const MAX_STEPS: number = 5
@@ -16,13 +16,13 @@ async function getTabPage(tabId: number): Promise<string> {
 }
 
 async function PromptRunner(msg: PromptMessage) {
-  if (msg.reset) return session = undefined
-
   const { prompt } = msg
-
+  let lastPage = ''
   let steps = 0
 
   while (steps < MAX_STEPS) {
+
+    // wait for active tab in normal window
     const [tab] = await chrome.tabs.query({
       active: true,
       currentWindow: true,
@@ -35,6 +35,7 @@ async function PromptRunner(msg: PromptMessage) {
       continue
     }
 
+    // wait for tab id if empty
     const { id: tabId, url, status } = tab
 
     if (!tabId) {
@@ -43,6 +44,7 @@ async function PromptRunner(msg: PromptMessage) {
       continue
     }
 
+    // wait for tab loading (TODO: timeout?)
     if (status !== 'complete') {
       let callback: any = (res: Function) =>
         (id: number, info: chrome.tabs.TabChangeInfo) => {
@@ -60,13 +62,19 @@ async function PromptRunner(msg: PromptMessage) {
       console.log('finished loading')
     }
 
-    const page = await getTabPage(tabId)
-    const action = await getAction({ session, url, prompt, page })
-    const runner = getActionRunner(action)
+    // page has changed?
+    const newPage = await getTabPage(tabId)
+    const page = newPage !== lastPage ? newPage : undefined
 
+    // fetch action from api and run
+    const action = await getAction({ session, url, prompt, page })
+
+    // apply user session if empty
     if (!session)
       session = action.session
 
+    // run action to user page
+    const runner = getActionRunner(action)
     const [execution] = await chrome.scripting.executeScript({
       target: { tabId },
       func: runner,
@@ -81,14 +89,26 @@ async function PromptRunner(msg: PromptMessage) {
     }
 
     // await sleep(5000)
+    lastPage = newPage
     steps++
   }
 }
 
 export default defineBackground(() => {
-  chrome.runtime.onMessage.addListener(async (msg) => {
-    if (typeof msg === 'object' && msg.type && msg.type === 'prompt') return PromptRunner(msg)
-  })
+  const messageListener = async (msg: Message) => {
+    if (typeof msg !== 'object' || !msg.type) return
+
+    switch (msg.type) {
+      case 'PROMPT':
+        PromptRunner(msg)
+        break
+      case 'RESET-SESSION':
+        session = undefined
+        break
+    }
+  }
+
+  chrome.runtime.onMessage.addListener(messageListener)
 
   console.log('Hello background!', { id: browser.runtime.id })
 })
