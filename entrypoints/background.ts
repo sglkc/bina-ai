@@ -1,4 +1,4 @@
-import { Message, PromptMessage } from '@utils/types'
+import { Message, NotifyMessage, PromptMessage } from '@utils/types'
 import { getAction, getActionRunner } from '@utils/runner'
 
 const MAX_STEPS: number = 5
@@ -6,13 +6,14 @@ let session: string | undefined
 
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
-async function getTabPage(tabId: number): Promise<string> {
-  const [injection] = await chrome.scripting.executeScript<any, string>({
-    target: { tabId },
-    files: ['content-scripts/markdown.js']
+async function getActiveTab(): Promise<chrome.tabs.Tab> {
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    currentWindow: true,
+    windowType: 'normal',
   })
 
-  return injection.result ?? ''
+  return tab ?? { id: 0 }
 }
 
 async function PromptRunner(msg: PromptMessage) {
@@ -21,22 +22,8 @@ async function PromptRunner(msg: PromptMessage) {
   let steps = 0
 
   while (steps < MAX_STEPS) {
-
-    // wait for active tab in normal window
-    const [tab] = await chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-      windowType: 'normal',
-    })
-
-    if (!tab) {
-      await sleep(5000)
-      steps++
-      continue
-    }
-
     // wait for tab id if empty
-    const { id: tabId, url, status } = tab
+    const { id: tabId, url, status } = await getActiveTab()
 
     if (!tabId) {
       await sleep(5000)
@@ -62,8 +49,13 @@ async function PromptRunner(msg: PromptMessage) {
       console.log('finished loading')
     }
 
-    // page has changed?
-    const newPage = await getTabPage(tabId)
+    // get page and compare if changed
+    const [injection] = await chrome.scripting.executeScript<any, string>({
+      target: { tabId },
+      files: ['content-scripts/markdown.js']
+    })
+
+    const newPage = injection.result ?? ''
     const page = newPage !== lastPage ? newPage : undefined
 
     // fetch action from api and run
@@ -94,6 +86,17 @@ async function PromptRunner(msg: PromptMessage) {
   }
 }
 
+async function notify(data: NotifyMessage) {
+  const { id: tabId } = await getActiveTab()
+
+  if (!tabId) return
+
+  await chrome.scripting.executeScript({
+    target: { tabId },
+    func: () => window.postMessage(data)
+  })
+}
+
 export default defineBackground(() => {
   const messageListener = async (msg: Message) => {
     if (typeof msg !== 'object' || !msg.type) return
@@ -105,6 +108,11 @@ export default defineBackground(() => {
       case 'RESET-SESSION':
         session = undefined
         break
+      case 'NOTIFY':
+        notify(msg)
+        break
+      default:
+        console.error('Undefined message type', msg)
     }
   }
 

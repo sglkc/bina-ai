@@ -7,4 +7,9 @@ export interface ResetMessage {
   type: 'RESET-SESSION'
 }
 
-export type Message = PromptMessage | ResetMessage
+export interface NotifyMessage {
+  type: 'NOTIFY'
+  message: string
+}
+
+export type Message = PromptMessage | ResetMessage | NotifyMessage
