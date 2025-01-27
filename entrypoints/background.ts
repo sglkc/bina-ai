@@ -86,14 +86,14 @@ async function PromptRunner(msg: PromptMessage) {
   }
 }
 
-async function notify(data: NotifyMessage) {
+async function postMessage(msg: NotifyMessage | AudioMessage) {
   const { id: tabId } = await getActiveTab()
 
   if (!tabId) return
 
   await chrome.scripting.executeScript({
     target: { tabId },
-    func: () => window.postMessage(data)
+    func: () => window.postMessage(msg)
   })
 }
 
@@ -109,7 +109,8 @@ export default defineBackground(() => {
         session = undefined
         break
       case 'NOTIFY':
-        notify(msg)
+      case 'AUDIO':
+        postMessage(msg)
         break
       default:
         console.error('Undefined message type', msg)

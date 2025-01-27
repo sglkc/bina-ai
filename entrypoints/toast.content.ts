@@ -7,14 +7,20 @@ export default defineContentScript({
   runAt: 'document_start',
   registration: 'manifest',
   main: () => {
-    window.addEventListener('message', (event: MessageEvent<NotifyMessage>) => {
+    const messageListener = (event: MessageEvent<NotifyMessage>) => {
       const msg = event.data
 
       if (typeof msg !== 'object' || msg.type !== 'NOTIFY') return
 
       Toastify({ text: msg.message }).showToast()
-    })
 
-    console.log('register')
+      window.postMessage({
+        type: 'AUDIO',
+        audio: msg.audio ?? 'next_step',
+      } satisfies AudioMessage)
+    }
+
+    window.addEventListener('message', messageListener)
+    // console.log('registered toast content script')
   },
 })

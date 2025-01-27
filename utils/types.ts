@@ -1,3 +1,5 @@
+type AudioName = 'finish' | 'listen' | 'next_step' | 'process'
+
 export interface PromptMessage {
   type: 'PROMPT'
   prompt?: string
@@ -9,7 +11,13 @@ export interface ResetMessage {
 
 export interface NotifyMessage {
   type: 'NOTIFY'
+  audio?: AudioName
   message: string
 }
 
-export type Message = PromptMessage | ResetMessage | NotifyMessage
+export interface AudioMessage {
+  type: 'AUDIO'
+  audio?: AudioName
+}
+
+export type Message = PromptMessage | ResetMessage | NotifyMessage | AudioMessage
