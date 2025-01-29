@@ -1,4 +1,4 @@
-import { SafeContentScriptMessage } from '@utils/types'
+import { Message } from '@utils/types'
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -8,12 +8,10 @@ export default defineContentScript({
   main: () => {
     const player = new Audio()
 
-    const messageListener = (event: MessageEvent<SafeContentScriptMessage>) => {
-      const msg = event.data
-
+    chrome.runtime.onMessage.addListener((msg: Message, sender) => {
       if (
         typeof msg !== 'object' ||
-          msg.origin !== chrome.runtime.id ||
+          sender.id !== chrome.runtime.id ||
           msg.type !== 'AUDIO'
       ) return
 
@@ -30,20 +28,19 @@ export default defineContentScript({
       player.play()
         .catch((err: Error) => {
           if (err.name === 'NotAllowedError') {
-            window.postMessage({
-              origin: chrome.runtime.id,
-              type: 'NOTIFY',
-              message: 'Interact with the document first to enable sounds',
-            } satisfies SafeContentScriptMessage)
-
+            // TODO: send notification for error??
+            // chrome.runtime.sendMessage({
+            //   type: 'NOTIFY',
+            //   message: 'Interact with the document first to enable sounds',
+            // } satisfies Message)
+            //
             return
           }
 
           player.play()
         })
-    }
+    })
 
-    window.addEventListener('message', messageListener)
     // console.log('registered audio content script')
   },
 })

@@ -1,9 +1,4 @@
-import {
-  ContentScriptMessage,
-  Message,
-  PromptMessage,
-  SafeContentScriptMessage,
-} from '@utils/types'
+import { Message, PromptMessage } from '@utils/types'
 import { getAction, getActionRunner } from '@utils/runner'
 
 const MAX_STEPS: number = 5
@@ -125,17 +120,12 @@ async function PromptRunner(msg: PromptMessage) {
   })
 }
 
-async function postMessage(msg: ContentScriptMessage) {
+async function postMessage(msg: Message) {
   const { id: tabId } = await getActiveTab()
 
   if (!tabId) return
 
-  const safeMsg = Object.assign({ origin: chrome.runtime.id }, msg)
-  await chrome.scripting.executeScript({
-    target: { tabId },
-    func: (msg: SafeContentScriptMessage) => window.postMessage(msg),
-    args: [safeMsg]
-  })
+  chrome.tabs.sendMessage<Message>(tabId, msg)
 }
 
 export default defineBackground(() => {
@@ -150,8 +140,17 @@ export default defineBackground(() => {
         session = undefined
         break
       case 'NOTIFY':
+        // listener in content script
+        if (!msg.audio) return
+
+        // forward audio player
+        postMessage({
+          type: 'AUDIO',
+          audio: msg.audio
+        })
+        break
       case 'AUDIO':
-        postMessage(msg)
+        // listener in content script
         break
       default:
         console.error('Undefined message type', msg)
