@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@types/chrome": "^0.0.280",
+    "@types/dom-speech-recognition": "^0.0.4",
     "@types/toastify-js": "^1.12.3",
     "@wxt-dev/unocss": "^1.0.0",
     "typescript": "^5.6.3",

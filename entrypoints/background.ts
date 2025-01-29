@@ -1,4 +1,4 @@
-import { Message, NotifyMessage, PromptMessage } from '@utils/types'
+import { ContentScriptMessage, Message, PromptMessage } from '@utils/types'
 import { getAction, getActionRunner } from '@utils/runner'
 
 const MAX_STEPS: number = 5
@@ -86,14 +86,15 @@ async function PromptRunner(msg: PromptMessage) {
   }
 }
 
-async function postMessage(msg: NotifyMessage | AudioMessage) {
+async function postMessage(msg: ContentScriptMessage) {
   const { id: tabId } = await getActiveTab()
 
   if (!tabId) return
 
   await chrome.scripting.executeScript({
     target: { tabId },
-    func: () => window.postMessage(msg)
+    func: (msg: ContentScriptMessage) => window.postMessage(msg),
+    args: [msg]
   })
 }
 
@@ -110,7 +111,8 @@ export default defineBackground(() => {
         break
       case 'NOTIFY':
       case 'AUDIO':
-        postMessage(msg)
+        const safeMsg = Object.assign({ origin: chrome.runtime.id }, msg)
+        postMessage(safeMsg)
         break
       default:
         console.error('Undefined message type', msg)
