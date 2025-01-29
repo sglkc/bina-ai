@@ -6,9 +6,10 @@ export default function Popup() {
   const speechRecognition = useRef<SpeechRecognition>(null)
   const input = useRef<HTMLTextAreaElement>(null)
 
-  const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj)
+  const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj).catch(() => null)
   const resetInput = () => input.current!.value = ''
   const resetSession = () => sendMessage({ type: 'RESET-SESSION' })
+  const shutupTTS = () => sendMessage({ type: 'TTS', kind: 'stop' })
   const process = () => {
     sendMessage({ type: 'NOTIFY', message: 'Running agent', audio: 'next_step' })
     sendMessage({ type: 'PROMPT', prompt: input.current!.value })
@@ -96,6 +97,12 @@ export default function Popup() {
         onClick={process}
       >
         GASKAN!
+      </button>
+      <button
+        class="b-2 b-black p-4 w-full bg-red-200 text-lg"
+        onClick={shutupTTS}
+      >
+        Hentikan TTS!!!
       </button>
       <button
         class="b-2 b-black p-4 w-full bg-gray text-lg"

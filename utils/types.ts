@@ -20,4 +20,21 @@ export interface AudioMessage {
   audio?: AudioName
 }
 
-export type Message = PromptMessage | ResetMessage | NotifyMessage | AudioMessage
+interface TTSTextMessage {
+  type: 'TTS'
+  kind: 'text'
+  text: string
+}
+
+interface TTSKindMessage {
+  type: 'TTS'
+  kind: 'done' | 'stop'
+}
+
+export type TTSMessage = TTSTextMessage | TTSKindMessage
+
+export type Message = PromptMessage
+  | ResetMessage
+  | NotifyMessage
+  | AudioMessage
+  | TTSMessage

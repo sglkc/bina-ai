@@ -11,7 +11,7 @@ export default defineContentScript({
     chrome.runtime.onMessage.addListener((msg: Message, sender) => {
       if (
         typeof msg !== 'object' ||
-          sender.origin !== chrome.runtime.id ||
+          sender.id !== chrome.runtime.id ||
           msg.type !== 'NOTIFY'
       ) return
 

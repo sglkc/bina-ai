@@ -62,7 +62,7 @@ async function PromptRunner(msg: PromptMessage) {
     // fetch action from api
     const action = await getAction({ session, url, prompt, page })
       .catch((err: Error) => {
-        postMessage({
+        handleMessage({
           type: 'NOTIFY',
           audio: 'error',
           message: 'Error occured while fetching agent: ' + err.name,
@@ -75,14 +75,14 @@ async function PromptRunner(msg: PromptMessage) {
     if (!session)
       session = action.session
 
-    postMessage({
+    handleMessage({
       type: 'NOTIFY',
       audio: 'process',
       message: `[${action.action}] ${action.intent}`,
     })
 
     // wait a bit for response
-    await sleep(3000)
+    await playTTS(action.intent)
 
     // run action to user page
     const runner = getActionRunner(action)
@@ -102,7 +102,7 @@ async function PromptRunner(msg: PromptMessage) {
     // wait a bit for response
     await sleep(3000)
 
-    postMessage({
+    handleMessage({
       type: 'NOTIFY',
       audio: 'process',
       message: 'Continuing agent...',
@@ -113,53 +113,82 @@ async function PromptRunner(msg: PromptMessage) {
     steps++
   }
 
-  postMessage({
+  const message = lastAction && lastAction.target ? lastAction.target : 'Max steps reached'
+
+  playTTS(message)
+  handleMessage({
     type: 'NOTIFY',
     audio: 'finish',
-    message: 'Execution completed: ' + (lastAction ? lastAction.target : 'Max steps reached')
+    message: '[DONE] ' + message
   })
 }
 
-async function postMessage<T>(msg: Message): Promise<T | void> {
+async function playTTS(text: string): Promise<void> {
+  return new Promise((resolve) => {
+    const handler = (msg: Message) => {
+      if (msg.type !== 'TTS' || msg.kind === 'text') return
+      chrome.runtime.onMessage.removeListener(handler)
+      resolve()
+    }
+
+    chrome.runtime.onMessage.addListener(handler)
+    handleMessage({ type: 'TTS', kind: 'text', text })
+  })
+}
+async function handleMessage(msg: Message) {
+  if (typeof msg !== 'object' || !msg.type) return
+
+  // forward to content scripts
   const { id: tabId } = await getActiveTab()
+  if (tabId) {
+    chrome.tabs.sendMessage(tabId, msg).catch(() => null)
+  }
 
-  if (!tabId) return
+  // forward to other things (popup or offscreen)
+  chrome.runtime.sendMessage(msg).catch(() => null)
 
-  return chrome.tabs.sendMessage<Message, T>(tabId, msg)
+  switch (msg.type) {
+    case 'PROMPT':
+      PromptRunner(msg)
+      break
+    case 'RESET-SESSION':
+      session = undefined
+      break
+    case 'NOTIFY':
+      // forward audio
+      if (msg.audio) {
+        handleMessage({
+          type: 'AUDIO',
+          audio: msg.audio
+        })
+      }
+      break
+    case 'AUDIO':
+      // create offscreen document for audio autoplay
+      chrome.offscreen.createDocument({
+        url: '/offscreen.html?audio=' + msg.audio,
+        reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
+        justification: 'autoplay can not play'
+      }).catch(() => null)
+      break
+    case 'TTS':
+      // listener in offscreen
+      if (msg.kind !== 'text') return
+
+      // create offscreen document for audio autoplay
+      chrome.offscreen.createDocument({
+        url: '/offscreen.html?tts=' + msg.text,
+        reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
+        justification: 'autoplay can not play'
+      }).catch(() => null)
+      break
+    default:
+      console.error('Undefined message type', msg)
+  }
 }
 
 export default defineBackground(() => {
-  chrome.runtime.onMessage.addListener(async (msg: Message) => {
-    if (typeof msg !== 'object' || !msg.type) return
-
-    switch (msg.type) {
-      case 'PROMPT':
-        PromptRunner(msg)
-        break
-      case 'RESET-SESSION':
-        session = undefined
-        break
-      case 'NOTIFY':
-        // listener in content script
-        if (!msg.audio) break
-
-        // @ts-ignore
-        msg.type = 'AUDIO'
-        // fallthrough to play audio
-      case 'AUDIO':
-        if (await chrome.offscreen.hasDocument()) return
-
-        // create offscreen document for audio autoplay
-        await chrome.offscreen.createDocument({
-          url: '/offscreen.html?audio=' + msg.audio,
-          reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
-          justification: 'autoplay can not play'
-        })
-        break
-      default:
-        console.error('Undefined message type', msg)
-    }
-  })
+  chrome.runtime.onMessage.addListener(handleMessage)
 
   // ensure microphone permission for speech recognition on first install
   chrome.runtime.onInstalled.addListener((e) => {
