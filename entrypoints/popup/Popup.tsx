@@ -10,7 +10,7 @@ export default function Popup() {
   const resetInput = () => input.current!.value = ''
   const resetSession = () => sendMessage({ type: 'RESET-SESSION' })
   const process = () => {
-    sendMessage({ type: 'NOTIFY', message: 'Executing agent', audio: 'next_step' })
+    sendMessage({ type: 'NOTIFY', message: 'Running agent', audio: 'next_step' })
     sendMessage({ type: 'PROMPT', prompt: input.current!.value })
   }
 

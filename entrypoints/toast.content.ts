@@ -1,4 +1,4 @@
-import { ContentScriptMessage } from '@utils/types'
+import { SafeContentScriptMessage } from '@utils/types'
 import Toastify from 'toastify-js'
 import 'toastify-js/src/toastify.css'
 
@@ -8,7 +8,7 @@ export default defineContentScript({
   runAt: 'document_start',
   registration: 'manifest',
   main: () => {
-    const messageListener = (event: MessageEvent<ContentScriptMessage>) => {
+    const messageListener = (event: MessageEvent<SafeContentScriptMessage>) => {
       const msg = event.data
 
       if (
@@ -23,7 +23,7 @@ export default defineContentScript({
         origin: chrome.runtime.id,
         type: 'AUDIO',
         audio: msg.audio,
-      } satisfies ContentScriptMessage)
+      } satisfies SafeContentScriptMessage)
     }
 
     window.addEventListener('message', messageListener)

@@ -21,12 +21,12 @@ const Runners: Record<ActionType, ActionRunner> = {
   'IMAGE': () => {
     return false
   },
-  'ANSWER': () => {
-    console.warn('IM GOING TO ANSWER')
+  'ANSWER': (action) => {
+    console.warn('IM ANSWERING', action)
     return false
   },
-  'STOP': () => {
-    console.warn('STOPPED')
+  'STOP': (action) => {
+    console.warn('STOPPED', action)
     return false
   },
 }
@@ -38,13 +38,20 @@ const api = ky.create({
 })
 
 export async function getAction(body: Partial<PromptRequest>): Promise<PromptResponse> {
-  const res = await api<PromptEndpointResponse>('prompt', { json: body }).json()
+  try {
+    const res = await api<PromptEndpointResponse>('prompt', { json: body }).json()
 
-  if ('message' in res) {
-    return { action: 'STOP', intent: 'API error occured', target: res.message }
+    if ('message' in res) throw new Error(res.message)
+
+    return res
+  } catch (error) {
+    let message = 'Unknown error'
+
+    console.error(error)
+    if (error instanceof Error) message = error.name
+
+    return { action: 'STOP', intent: 'API error occured', target: message }
   }
-
-  return res
 }
 
 export function getActionRunner(action: Action): ActionRunner {

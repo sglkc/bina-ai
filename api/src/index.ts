@@ -21,8 +21,8 @@ app.post('/prompt', async (req: PromptEndpointRequest, res) => {
 
   const body = req.body
 
-  if (!body.url || !body.page || !body.prompt) {
-    res.status(400).json({ message: 'json must have url or page or prompt' })
+  if (!body.url && !body.prompt) {
+    res.status(400).json({ message: 'json must have url or prompt' })
     return
   }
 

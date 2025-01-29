@@ -1,4 +1,4 @@
-import { ContentScriptMessage } from '@utils/types'
+import { SafeContentScriptMessage } from '@utils/types'
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -8,7 +8,7 @@ export default defineContentScript({
   main: () => {
     const player = new Audio()
 
-    const messageListener = (event: MessageEvent<ContentScriptMessage>) => {
+    const messageListener = (event: MessageEvent<SafeContentScriptMessage>) => {
       const msg = event.data
 
       if (
@@ -17,7 +17,7 @@ export default defineContentScript({
           msg.type !== 'AUDIO'
       ) return
 
-      if (!msg.audio && !player.paused) {
+      if (!msg.audio) {
         player.pause()
         return
       }
@@ -34,7 +34,7 @@ export default defineContentScript({
               origin: chrome.runtime.id,
               type: 'NOTIFY',
               message: 'Interact with the document first to enable sounds',
-            } satisfies ContentScriptMessage)
+            } satisfies SafeContentScriptMessage)
 
             return
           }

@@ -20,8 +20,10 @@ export interface AudioMessage {
   audio?: AudioName
 }
 
-export type ContentScriptMessage = (NotifyMessage | AudioMessage) & {
-  origin: string;
+export type ContentScriptMessage = NotifyMessage | AudioMessage
+
+export type SafeContentScriptMessage = ContentScriptMessage & {
+  origin: string
 }
 
 export type Message = PromptMessage | ResetMessage | NotifyMessage | AudioMessage

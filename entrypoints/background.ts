@@ -1,4 +1,9 @@
-import { ContentScriptMessage, Message, PromptMessage } from '@utils/types'
+import {
+  ContentScriptMessage,
+  Message,
+  PromptMessage,
+  SafeContentScriptMessage,
+} from '@utils/types'
 import { getAction, getActionRunner } from '@utils/runner'
 
 const MAX_STEPS: number = 5
@@ -18,6 +23,7 @@ async function getActiveTab(): Promise<chrome.tabs.Tab> {
 
 async function PromptRunner(msg: PromptMessage) {
   const { prompt } = msg
+  let lastAction = undefined
   let lastPage = ''
   let steps = 0
 
@@ -58,12 +64,30 @@ async function PromptRunner(msg: PromptMessage) {
     const newPage = injection.result ?? ''
     const page = newPage !== lastPage ? newPage : undefined
 
-    // fetch action from api and run
+    // fetch action from api
     const action = await getAction({ session, url, prompt, page })
+      .catch((err: Error) => {
+        postMessage({
+          type: 'NOTIFY',
+          audio: 'error',
+          message: 'Error occured while fetching agent: ' + err.name,
+        })
+      })
+
+    if (!action) break
 
     // apply user session if empty
     if (!session)
       session = action.session
+
+    postMessage({
+      type: 'NOTIFY',
+      audio: 'process',
+      message: `[${action.action}] ${action.intent}`,
+    })
+
+    // wait a bit for response
+    await sleep(3000)
 
     // run action to user page
     const runner = getActionRunner(action)
@@ -76,14 +100,29 @@ async function PromptRunner(msg: PromptMessage) {
     console.info(JSON.stringify(action, null, 1))
 
     if (!execution.result) {
-      console.error('execution ended')
+      lastAction = action
       break
     }
+
+    // wait a bit for response
+    await sleep(3000)
+
+    postMessage({
+      type: 'NOTIFY',
+      audio: 'process',
+      message: 'Continuing agent...',
+    })
 
     // await sleep(5000)
     lastPage = newPage
     steps++
   }
+
+  postMessage({
+    type: 'NOTIFY',
+    audio: 'finish',
+    message: 'Execution completed: ' + (lastAction ? lastAction.target : 'Max steps reached')
+  })
 }
 
 async function postMessage(msg: ContentScriptMessage) {
@@ -91,10 +130,11 @@ async function postMessage(msg: ContentScriptMessage) {
 
   if (!tabId) return
 
+  const safeMsg = Object.assign({ origin: chrome.runtime.id }, msg)
   await chrome.scripting.executeScript({
     target: { tabId },
-    func: (msg: ContentScriptMessage) => window.postMessage(msg),
-    args: [msg]
+    func: (msg: SafeContentScriptMessage) => window.postMessage(msg),
+    args: [safeMsg]
   })
 }
 
@@ -111,8 +151,7 @@ export default defineBackground(() => {
         break
       case 'NOTIFY':
       case 'AUDIO':
-        const safeMsg = Object.assign({ origin: chrome.runtime.id }, msg)
-        postMessage(safeMsg)
+        postMessage(msg)
         break
       default:
         console.error('Undefined message type', msg)
