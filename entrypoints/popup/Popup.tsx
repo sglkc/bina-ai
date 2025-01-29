@@ -56,6 +56,12 @@ export default function Popup() {
     recognition.addEventListener('error', async (err) => {
       console.error('error!', err)
       setIsListening(false)
+
+      if (err.error === 'not-allowed') {
+        chrome.runtime.openOptionsPage()
+        return
+      }
+
       sendMessage({
         type: 'NOTIFY',
         message: 'Speech recognition error: ' + err.error,

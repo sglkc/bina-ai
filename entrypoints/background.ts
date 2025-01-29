@@ -120,16 +120,16 @@ async function PromptRunner(msg: PromptMessage) {
   })
 }
 
-async function postMessage(msg: Message) {
+async function postMessage<T>(msg: Message): Promise<T | void> {
   const { id: tabId } = await getActiveTab()
 
   if (!tabId) return
 
-  chrome.tabs.sendMessage<Message>(tabId, msg)
+  return chrome.tabs.sendMessage<Message, T>(tabId, msg)
 }
 
 export default defineBackground(() => {
-  const messageListener = async (msg: Message) => {
+  chrome.runtime.onMessage.addListener(async (msg: Message) => {
     if (typeof msg !== 'object' || !msg.type) return
 
     switch (msg.type) {
@@ -141,23 +141,25 @@ export default defineBackground(() => {
         break
       case 'NOTIFY':
         // listener in content script
-        if (!msg.audio) return
+        if (!msg.audio) break
 
-        // forward audio player
-        postMessage({
-          type: 'AUDIO',
-          audio: msg.audio
-        })
-        break
+        // @ts-ignore
+        msg.type = 'AUDIO'
+        // fallthrough to play audio
       case 'AUDIO':
-        // listener in content script
+        if (await chrome.offscreen.hasDocument()) return
+
+        // create offscreen document for audio autoplay
+        await chrome.offscreen.createDocument({
+          url: '/offscreen.html?audio=' + msg.audio,
+          reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
+          justification: 'autoplay can not play'
+        })
         break
       default:
         console.error('Undefined message type', msg)
     }
-  }
-
-  chrome.runtime.onMessage.addListener(messageListener)
+  })
 
   // ensure microphone permission for speech recognition on first install
   chrome.runtime.onInstalled.addListener((e) => {
