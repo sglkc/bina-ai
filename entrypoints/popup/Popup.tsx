@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { Message } from '@utils/types'
 
 export default function Popup() {
-  const recognition = new webkitSpeechRecognition()
   const [isListening, setIsListening] = useState<boolean>(false)
+  const speechRecognition = useRef<SpeechRecognition>(null)
   const input = useRef<HTMLTextAreaElement>(null)
 
   const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj)
@@ -16,19 +16,25 @@ export default function Popup() {
 
   const listen = () => {
     try {
-      recognition.start()
+      speechRecognition.current?.start()
     } catch {
-      recognition.stop()
+      speechRecognition.current?.stop()
     }
   }
 
   useEffect(() => {
+    if (!speechRecognition.current) {
+      speechRecognition.current = new webkitSpeechRecognition()
+    }
+
+    const recognition = speechRecognition.current
     recognition.lang = 'id'
+    recognition.continuous = true
     recognition.interimResults = true
     recognition.maxAlternatives = 0
 
     recognition.addEventListener('audiostart', async () => {
-      // setIsListening(() => true) // problematik af
+      setIsListening(true)
       sendMessage({
         type: 'NOTIFY',
         message: 'Listening to microphone',
@@ -37,7 +43,7 @@ export default function Popup() {
     })
 
     recognition.addEventListener('audioend', async () => {
-      // setIsListening(() => false)
+      setIsListening(false)
       sendMessage({
         type: 'NOTIFY',
         message: 'Finished listening',
@@ -49,7 +55,7 @@ export default function Popup() {
 
     recognition.addEventListener('error', async (err) => {
       console.error('error!', err)
-      // setIsListening(() => false)
+      setIsListening(false)
       sendMessage({
         type: 'NOTIFY',
         message: 'Speech recognition error: ' + err.error,
