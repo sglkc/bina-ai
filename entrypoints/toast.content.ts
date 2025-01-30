@@ -1,4 +1,3 @@
-import { Message } from '@utils/types'
 import Toastify from 'toastify-js'
 import 'toastify-js/src/toastify.css'
 
@@ -15,7 +14,17 @@ export default defineContentScript({
           msg.type !== 'NOTIFY'
       ) return
 
-      Toastify({ text: msg.message }).showToast()
+      Toastify({
+        position: 'left',
+        // tts already integrated, no need for screen reader
+        ariaLive: 'off',
+        style: {
+          padding: '1.5rem',
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+        },
+        text: msg.message,
+      }).showToast()
     })
 
     // console.log('registered toast content script')

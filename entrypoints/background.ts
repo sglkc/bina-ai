@@ -1,19 +1,20 @@
-import { Message, PromptMessage } from '@utils/types'
-import { getAction, getActionRunner } from '@utils/runner'
-
 const MAX_STEPS: number = 5
 let session: string | undefined
 
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
 async function getActiveTab(): Promise<chrome.tabs.Tab> {
-  const [tab] = await chrome.tabs.query({
-    active: true,
-    currentWindow: true,
-    windowType: 'normal',
-  })
+  try {
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      windowType: 'normal',
+    })
 
-  return tab ?? { id: 0 }
+    return tab
+  } catch {
+    // @ts-expect-error: additional check on id
+    return { id: 0 }
+  }
 }
 
 async function PromptRunner(msg: PromptMessage) {
@@ -193,7 +194,7 @@ export default defineBackground(() => {
   // commands for shortcut keys
   chrome.commands.onCommand.addListener((command) => {
     if (command === 'open-popup') {
-      chrome.action.openPopup()
+      chrome.action.openPopup().catch(() => null)
     }
   })
 

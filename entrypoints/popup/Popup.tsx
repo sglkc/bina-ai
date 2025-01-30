@@ -1,18 +1,32 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { Message } from '@utils/types'
 
 export default function Popup() {
   const [isListening, setIsListening] = useState<boolean>(false)
+  const [auto, setAuto] = useState(localStorage.getItem('auto-tts'))
   const speechRecognition = useRef<SpeechRecognition>(null)
   const input = useRef<HTMLTextAreaElement>(null)
 
-  const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj).catch(() => null)
+  const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj)
+    .catch(() => null)
+
   const resetInput = () => input.current!.value = ''
   const resetSession = () => sendMessage({ type: 'RESET-SESSION' })
   const shutupTTS = () => sendMessage({ type: 'TTS', kind: 'stop' })
   const process = () => {
     sendMessage({ type: 'NOTIFY', message: 'Running agent', audio: 'next_step' })
     sendMessage({ type: 'PROMPT', prompt: input.current!.value })
+  }
+
+  const toggleTts = () => {
+    setAuto((state) => {
+      if (state) {
+        localStorage.removeItem('auto-tts')
+      } else {
+        localStorage.setItem('auto-tts', 'true')
+      }
+
+      return localStorage.getItem('auto-tts')
+    })
   }
 
   const listen = () => {
@@ -78,6 +92,16 @@ export default function Popup() {
 
       input.current.value = all
     })
+
+    // auto tts if checked
+    if (auto) listen()
+
+    // command listener for auto toggle
+    chrome.commands.onCommand.addListener((command) => {
+      if (command === 'open-popup') {
+        listen()
+      }
+    })
   }, [])
 
   return (
@@ -104,6 +128,16 @@ export default function Popup() {
       >
         Hentikan TTS!!!
       </button>
+      <div class="b-2 b-black w-full text-lg bg-yellow-100 grid">
+        <label class="p-4 flex gap-4">
+          <input
+            type="checkbox"
+            onClick={toggleTts}
+            defaultChecked={!!auto}
+          />
+          <span>TTS otomatis?</span>
+        </label>
+      </div>
       <button
         class="b-2 b-black p-4 w-full bg-gray text-lg"
         type="reset"
@@ -118,5 +152,5 @@ export default function Popup() {
         Start new session
       </button>
     </div>
-  );
+  )
 }

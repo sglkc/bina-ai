@@ -17,12 +17,15 @@ const tts = new Audio()
 
 // its possible to pass response function from message listener
 // but can't handle tts on init
-tts.addEventListener('ended', () => {
+const returnListener =  () => {
   chrome.runtime.sendMessage<TTSMessage>({
     type: 'TTS',
     kind: 'done',
   }).catch(() => null)
-})
+}
+
+tts.addEventListener('ended', returnListener)
+tts.addEventListener('error', returnListener)
 
 function playTTS(text: string) {
   const url = new URL('https://tts-api.netlify.app')

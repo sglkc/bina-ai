@@ -30,10 +30,5 @@ export default defineConfig({
     plugins: [
       preact(),
     ],
-    resolve: {
-      alias: {
-        '@utils': path.resolve(__dirname, './utils')
-      }
-    }
   })
 })
