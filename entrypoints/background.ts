@@ -190,6 +190,13 @@ async function handleMessage(msg: Message) {
 export default defineBackground(() => {
   chrome.runtime.onMessage.addListener(handleMessage)
 
+  // commands for shortcut keys
+  chrome.commands.onCommand.addListener((command) => {
+    if (command === 'open-popup') {
+      chrome.action.openPopup()
+    }
+  })
+
   // ensure microphone permission for speech recognition on first install
   chrome.runtime.onInstalled.addListener((e) => {
     if (e.reason === chrome.runtime.OnInstalledReason.INSTALL)

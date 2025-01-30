@@ -8,16 +8,29 @@ function App() {
   const bg = useRef<HTMLButtonElement>(null)
   const [message, setMessage] = useState<string>()
 
+  const sendTTS = (obj: TTSMessage) => chrome.runtime.sendMessage(obj).catch(() => null)
   const requestPermission = () => {
+    sendTTS({ type: 'TTS', kind: 'stop' })
+
     if (message) return
 
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        stream.getTracks().forEach((track) => track.stop())
-        setMessage('Sukses! Penggunaan mikrofon telah diizinkan')
+        const message = 'Sukses! Penggunaan mikrofon telah diizinkan. ' +
+          'Gunakan kombinasi Ctrl+Shift+1 untuk memulai navigasi'
+
         localStorage.setItem('has-mic', 'true')
+        stream.getTracks().forEach((track) => track.stop())
         bg.current?.classList.add('bg-green-300')
+
+        setMessage(message)
+        sendTTS({ type: 'TTS', kind: 'text', text: message })
+          .then(() => {
+            // TODO: open user's default page
+            location.assign('https://google.com')
+            // chrome.action.openPopup()
+          })
       })
       .catch((error: DOMException) => {
         let message = error.name + ': '
@@ -38,17 +51,27 @@ function App() {
         }
 
         bg.current?.classList.add('bg-red-300')
+        sendTTS({ type: 'TTS', kind: 'text', text: message })
         setMessage(message)
       })
   }
 
   useEffect(() => {
     if (localStorage.getItem('has-mic')) {
+      const message = 'Anda sudah memberikan izin mikrofon'
+
       bg.current?.classList.add('bg-green-300')
-      setMessage('Sudah ada izin!')
+      setMessage(message)
+      sendTTS({ type: 'TTS', kind: 'stop' })
+      sendTTS({ type: 'TTS', kind: 'text', text: message })
     }
 
     bg.current?.click()
+    sendTTS({
+      type: 'TTS',
+      kind: 'text',
+      text: 'Untuk penggunaan pertama, mohon izinkan penggunaan mikrofon',
+    })
   }, [])
 
   return (
@@ -56,9 +79,10 @@ function App() {
       ref={bg}
       class="px-8 py-16 w-screen h-100svh text-4xl text-center fw-bold leading-16"
       onClick={requestPermission}
+      disabled={Boolean(message)}
     >
       <hr class="hidden bg-green-300 bg-red-300" />
-      { message ?? 'Press "Allow" to enable microphone access for text-to-speech!' }
+      { message ?? 'Klik "Allow" atau "Izinkan" untuk penggunaan mikrofon' }
     </button>
   )
 }

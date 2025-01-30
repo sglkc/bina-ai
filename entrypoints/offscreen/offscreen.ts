@@ -29,6 +29,7 @@ function playTTS(text: string) {
 
   url.searchParams.set('text', text)
   url.searchParams.set('lang', 'id')
+  url.searchParams.set('speed', '1.5')
 
   tts.src = url.toString()
   tts.play()

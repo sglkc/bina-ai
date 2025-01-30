@@ -15,7 +15,15 @@ export default defineConfig({
           '/audio/*'
         ]
       }
-    ]
+    ],
+    commands: {
+      'open-popup': {
+        suggested_key: {
+          default: 'Ctrl+Shift+1'
+        },
+        description: 'Open popup and enable speech recognition',
+      },
+    }
   },
   modules: ['@wxt-dev/unocss'],
   vite: () => ({
