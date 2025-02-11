@@ -8,6 +8,7 @@ const agentId = process.env.MISTRAL_AGENT_ID!
 const client = new Mistral({ apiKey })
 
 export function parsePrompt({ page, url, prompt, image }: Partial<PromptRequest>): PromptContent {
+  console.log('>> generating content', page?.length, '/', url?.substring(0, 20), ':', prompt)
   const text = (page ?
     '```markdown\n'
       + page + '\n'

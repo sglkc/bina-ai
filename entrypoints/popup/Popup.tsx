@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 
 export default function Popup() {
   const [isListening, setIsListening] = useState<boolean>(false)
-  const [auto, setAuto] = useState(localStorage.getItem('auto-tts'))
+  const [auto, setAuto] = useState<string | null>('true')
   const speechRecognition = useRef<SpeechRecognition>(null)
   const input = useRef<HTMLTextAreaElement>(null)
 
@@ -44,7 +44,7 @@ export default function Popup() {
 
     const recognition = speechRecognition.current
     recognition.lang = 'id'
-    recognition.continuous = true
+    // recognition.continuous = true
     recognition.interimResults = true
     recognition.maxAlternatives = 0
 
@@ -65,6 +65,7 @@ export default function Popup() {
         audio: 'finish'
       })
 
+      process()
       // kirim hasil prompt
     })
 

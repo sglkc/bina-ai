@@ -28,7 +28,9 @@ function App() {
         sendTTS({ type: 'TTS', kind: 'text', text: message })
           .then(() => {
             // TODO: open user's default page
-            location.assign('https://google.com')
+            setTimeout(() => {
+              location.assign('https://google.com')
+            }, 5000)
             // chrome.action.openPopup()
           })
       })

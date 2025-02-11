@@ -31,10 +31,13 @@ const Runners: Record<ActionType, ActionRunner> = {
   },
 }
 
+export const controller = new AbortController()
+
 const api = ky.create({
   prefixUrl: 'http://localhost:5000',
   method: 'post',
-  timeout: 30_000
+  timeout: 30_000,
+  signal: controller.signal,
 })
 
 export async function getAction(body: Partial<PromptRequest>): Promise<PromptResponse> {

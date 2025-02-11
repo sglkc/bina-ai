@@ -1,5 +1,9 @@
 type AudioName = 'finish' | 'listen' | 'next_step' | 'process' | 'error'
 
+export interface StopMessage {
+  type: 'STOP'
+}
+
 export interface PromptMessage {
   type: 'PROMPT'
   prompt?: string
@@ -33,7 +37,8 @@ interface TTSKindMessage {
 
 export type TTSMessage = TTSTextMessage | TTSKindMessage
 
-export type Message = PromptMessage
+export type Message = StopMessage
+  | PromptMessage
   | ResetMessage
   | NotifyMessage
   | AudioMessage

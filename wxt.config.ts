@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { preact } from '@preact/preset-vite'
 import { defineConfig } from 'wxt'
 
@@ -6,6 +5,8 @@ import { defineConfig } from 'wxt'
 export default defineConfig({
   extensionApi: 'chrome',
   manifest: {
+    name: 'Web AID',
+    description: 'AI-based Assistive Technology for Web Navigation',
     permissions: ['activeTab', 'offscreen', 'scripting'],
     host_permissions: ['<all_urls>'],
     web_accessible_resources: [
