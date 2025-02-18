@@ -9,6 +9,7 @@ function App() {
   const [message, setMessage] = useState<string>()
 
   const sendTTS = (obj: TTSMessage) => chrome.runtime.sendMessage(obj).catch(() => null)
+
   const requestPermission = () => {
     sendTTS({ type: 'TTS', kind: 'stop' })
 
@@ -72,7 +73,8 @@ function App() {
     sendTTS({
       type: 'TTS',
       kind: 'text',
-      text: 'Untuk penggunaan pertama, mohon izinkan penggunaan mikrofon',
+      text: 'Untuk penggunaan pertama, mohon izinkan penggunaan mikrofon.' +
+        ' Anda bisa menekan tombol Tab sebanyak 3 kali dan tekan tombol Enter',
     })
   }, [])
 
@@ -84,7 +86,7 @@ function App() {
       disabled={Boolean(message)}
     >
       <hr class="hidden bg-green-300 bg-red-300" />
-      { message ?? 'Klik "Allow" atau "Izinkan" untuk penggunaan mikrofon' }
+      { message ?? 'Klik Izinkan untuk menggunakan mikrofon, Anda bisa menggunakan Tab sebanyak 3x dan Enter' }
     </button>
   )
 }

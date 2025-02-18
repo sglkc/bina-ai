@@ -67,14 +67,16 @@ async function run(msg: PromptMessage): Promise<void> {
     if (!session)
       session = action.session
 
-    handleMessage({
-      type: 'NOTIFY',
-      audio: 'process',
-      message: `[${action.action}] ${action.intent}`,
-    })
+    if (action.intent !== action.target) {
+      handleMessage({
+        type: 'NOTIFY',
+        audio: 'process',
+        message: `[${action.action}] ${action.intent}`,
+      })
 
-    // wait a bit for response
-    await playTTS(action.intent)
+      // wait a bit for response
+      await playTTS(action.intent)
+    }
 
     // run action to user page
     const runner = getActionRunner(action)

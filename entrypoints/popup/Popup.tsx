@@ -1,17 +1,19 @@
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useRef, useState } from 'preact/hooks'
+import SpeechRecognition from './components/SpeechRecognition'
+
+const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj).catch(() => null)
+
+const shutupTTS = () => sendMessage({ type: 'TTS', kind: 'stop' })
+
+const reset = () => {
+  sendMessage({ type: 'RESET-SESSION' })
+  sendMessage({ type: 'STOP' })
+}
 
 export default function Popup() {
-  const [isListening, setIsListening] = useState<boolean>(false)
-  const [auto, setAuto] = useState<string | null>('true')
-  const speechRecognition = useRef<SpeechRecognition>(null)
+  const [auto, setAuto] = useState<boolean>(!!localStorage.getItem('auto-tts'))
   const input = useRef<HTMLTextAreaElement>(null)
 
-  const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj)
-    .catch(() => null)
-
-  const resetInput = () => input.current!.value = ''
-  const resetSession = () => sendMessage({ type: 'RESET-SESSION' })
-  const shutupTTS = () => sendMessage({ type: 'TTS', kind: 'stop' })
   const process = () => {
     sendMessage({ type: 'NOTIFY', message: 'Running agent', audio: 'next_step' })
     sendMessage({ type: 'PROMPT', prompt: input.current!.value })
@@ -25,132 +27,47 @@ export default function Popup() {
         localStorage.setItem('auto-tts', 'true')
       }
 
-      return localStorage.getItem('auto-tts')
+      return !!localStorage.getItem('auto-tts')
     })
   }
-
-  const listen = () => {
-    try {
-      speechRecognition.current?.start()
-    } catch {
-      speechRecognition.current?.stop()
-    }
-  }
-
-  useEffect(() => {
-    if (!speechRecognition.current) {
-      speechRecognition.current = new webkitSpeechRecognition()
-    }
-
-    const recognition = speechRecognition.current
-    recognition.lang = 'id'
-    // recognition.continuous = true
-    recognition.interimResults = true
-    recognition.maxAlternatives = 0
-
-    recognition.addEventListener('audiostart', async () => {
-      setIsListening(true)
-      sendMessage({
-        type: 'NOTIFY',
-        message: 'Listening to microphone',
-        audio: 'listen',
-      })
-    })
-
-    recognition.addEventListener('audioend', async () => {
-      setIsListening(false)
-      sendMessage({
-        type: 'NOTIFY',
-        message: 'Finished listening',
-        audio: 'finish'
-      })
-
-      process()
-      // kirim hasil prompt
-    })
-
-    recognition.addEventListener('error', async (err) => {
-      console.error('error!', err)
-      setIsListening(false)
-
-      if (err.error === 'not-allowed') {
-        chrome.runtime.openOptionsPage()
-        return
-      }
-
-      sendMessage({
-        type: 'NOTIFY',
-        message: 'Speech recognition error: ' + err.error,
-        audio: 'error'
-      })
-    })
-
-    recognition.addEventListener('result', async (e) => {
-      // const final = e.results[e.resultIndex][0].transcript
-      const all = Array.from(e.results).map((s) => s[0].transcript.trim()).join(' ').trim()
-
-      if (!input.current) return
-
-      input.current.value = all
-    })
-
-    // auto tts if checked
-    if (auto) listen()
-
-    // command listener for auto toggle
-    chrome.commands.onCommand.addListener((command) => {
-      if (command === 'open-popup') {
-        listen()
-      }
-    })
-  }, [])
 
   return (
-    <div class="h-full w-full">
+
+    <div class="min-w-64 m-4 grid gap-4">
       <textarea
         ref={input}
-        class="b-2 b-black p-2 text-xl"
+        class="border border-gray-300 rounded-lg p-3 text-lg shadow-sm focus:ring-2 focus:ring-blue-500"
         placeholder="Isi dengan perintah atau pertanyaan"
-        rows={3}
+        rows={4}
       />
-      <button class="b-2 b-black p-4 w-full bg-red text-xl" onClick={listen}>
-        { isListening ? 'Stop Mic' : 'Start Mic' }
-      </button>
-      <button
-        class="b-2 b-black p-8 w-full bg-red text-2xl fw-bold"
-        type="submit"
-        onClick={process}
-      >
-        GASKAN!
-      </button>
-      <button
-        class="b-2 b-black p-4 w-full bg-red-200 text-lg"
-        onClick={shutupTTS}
-      >
-        Hentikan TTS!!!
-      </button>
-      <div class="b-2 b-black w-full text-lg bg-yellow-100 grid">
-        <label class="p-4 flex gap-4">
+
+      <SpeechRecognition auto={auto} input={input} process={process} />
+
+      <div class="border border-gray-300 rounded-lg p-3 bg-yellow-50 shadow-sm text-base">
+        <label class="flex items-center gap-3">
           <input
             type="checkbox"
             onClick={toggleTts}
-            defaultChecked={!!auto}
+            defaultChecked={auto}
+            class="form-checkbox h-5 w-5 text-blue-600"
           />
-          <span>TTS otomatis?</span>
+          <span class="text-gray-700">TTS otomatis?</span>
         </label>
       </div>
+
       <button
-        class="b-2 b-black p-4 w-full bg-gray text-lg"
-        type="reset"
-        onClick={resetInput}
+        class="w-full py-3 bg-red-500 text-white text-xl rounded-lg shadow hover:bg-red-600 transition duration-300"
+        type="submit"
+        onClick={process}
       >
-        Hapus prompt
+        Proses
       </button>
+
       <button
-        class="b-2 b-black p-4 w-full bg-blue text-lg"
-        onClick={resetSession}
+        class="w-full py-3 bg-blue-500 text-white text-lg rounded-lg shadow hover:bg-blue-600 transition duration-300"
+        onClick={reset}
       >
-        Start new session
+        Reset
       </button>
     </div>
   )
