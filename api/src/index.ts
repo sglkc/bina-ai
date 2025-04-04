@@ -1,10 +1,10 @@
 import 'dotenv/config'
 import { randomUUID } from 'node:crypto'
 import express from 'express'
-import minifyHtml from './minifier'
-import prompt, { parsePrompt } from './prompt'
-import { MinifierEndpointRequest, PromptEndpointRequest } from './types'
-import { getMessages } from './message'
+import minifyHtml from './minifier.js'
+import prompt, { parsePrompt } from './prompt.js'
+import { MinifierEndpointRequest, PromptEndpointRequest } from './types.js'
+import { getMessages } from './message.js'
 
 const PORT = process.env.PORT ?? 5000
 const app = express()

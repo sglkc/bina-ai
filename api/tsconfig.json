@@ -6,14 +6,14 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "outDir": "dist",
     "importsNotUsedAsValues": "remove",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

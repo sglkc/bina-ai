@@ -1,8 +1,7 @@
 {
-  "name": "web-aid",
-  "description": "Web navigation assistive technology for the visually impaired",
-  "private": true,
-  "version": "0.0.0",
+  "name": "bina-ai",
+  "description": "Blind-friendly Intelligent Navigation Assistant. AI-based web assistive technology for the visually impaired ✨",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "wxt",

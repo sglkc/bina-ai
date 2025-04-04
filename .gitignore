@@ -34,3 +34,5 @@ build
 *.sqlite
 
 !entrypoints/**/*.html
+!**/prompt.txt
+!README.md

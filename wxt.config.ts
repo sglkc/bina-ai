@@ -1,12 +1,11 @@
 import { preact } from '@preact/preset-vite'
 import { defineConfig } from 'wxt'
 
-// See https://wxt.dev/api/config.html
 export default defineConfig({
-  extensionApi: 'chrome',
   manifest: {
-    name: 'Web AID',
-    description: 'AI-based Assistive Technology for Web Navigation',
+    name: 'BINA: Blind-friendly Intelligent Navigation Assistant',
+    description: 'AI-based web assistive technology for the visually impaired',
+    short_name: 'BINA AI',
     permissions: ['activeTab', 'offscreen', 'scripting'],
     host_permissions: ['<all_urls>'],
     web_accessible_resources: [
