@@ -5,7 +5,7 @@ import {
   PromptEndpointResponse,
   PromptRequest,
   PromptResponse,
-} from '@api/types'
+} from '@bina-ai/types'
 
 export type ActionRunner = (action: Partial<Action>) => boolean
 

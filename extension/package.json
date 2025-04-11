@@ -1,0 +1,35 @@
+{
+  "name": "@bina-ai/extension",
+  "private": true,
+  "description": "Blind-friendly Intelligent Navigation Assistant. AI-based web assistive technology for the visually impaired ✨",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "@bina-ai/types": "workspace:*",
+    "@preact/preset-vite": "^2.10.1",
+    "@unocss/reset": "66.1.0-beta.8",
+    "dom-to-semantic-markdown": "^1.3.0",
+    "ky": "^1.8.0",
+    "preact": "^10.26.4",
+    "toastify-js": "^1.12.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.280",
+    "@types/dom-speech-recognition": "^0.0.4",
+    "@types/toastify-js": "^1.12.3",
+    "@wxt-dev/unocss": "^1.0.1",
+    "typescript": "^5.8.2",
+    "unocss": "66.1.0-beta.8",
+    "wxt": "^0.20.0"
+  }
+}

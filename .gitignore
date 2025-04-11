@@ -33,6 +33,6 @@ build
 *.html
 *.sqlite
 
-!entrypoints/**/*.html
+!**/index.html
 !**/prompt.txt
 !README.md
