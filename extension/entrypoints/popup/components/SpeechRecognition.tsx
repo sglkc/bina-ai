@@ -1,5 +1,6 @@
 import { RefObject } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
+import Button from './Button'
 
 export interface SpeechRecognitionProps {
   auto: boolean
@@ -94,11 +95,12 @@ export default function SpeechRecognition({
   }, [])
 
   return (
-    <button
-      class="mx-auto py-3 px-6 bg-red-500 font-bold text-white text-lg rounded-full shadow hover:bg-red-600 transition duration-300"
+    <Button
+      class="mx-auto bg-red-500 hover:bg-red-600"
       onClick={listen}
     >
-      {isListening ? 'Stop Mic' : 'Start Mic'}
-    </button>
+      <div class={'text-2xl ' + (isListening ? 'i-mdi:microphone-off' : 'i-mdi:microphone')}></div>
+      {isListening ? 'Hentikan Mikrofon' : 'Mulai Berbicara'}
+    </Button>
   )
 }

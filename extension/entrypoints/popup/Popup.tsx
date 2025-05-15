@@ -1,5 +1,6 @@
 import { useRef, useState } from 'preact/hooks'
 import SpeechRecognition from './components/SpeechRecognition'
+import Button from './components/Button'
 
 const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj).catch(() => null)
 
@@ -32,7 +33,6 @@ export default function Popup() {
   }
 
   return (
-
     <div class="min-w-64 m-4 grid gap-4">
       <textarea
         ref={input}
@@ -43,32 +43,32 @@ export default function Popup() {
 
       <SpeechRecognition auto={auto} input={input} process={process} />
 
-      <div class="border border-gray-300 rounded-lg p-3 bg-yellow-50 shadow-sm text-base">
+      <div class="border border-gray-300 rounded-lg p-3 bg-yellow-100 shadow-sm text-base">
         <label class="flex items-center gap-3">
           <input
             type="checkbox"
             onClick={toggleTts}
             defaultChecked={auto}
-            class="form-checkbox h-5 w-5 text-blue-600"
+            class="h-5 w-5"
           />
-          <span class="text-gray-700">TTS otomatis?</span>
+          <span class="fw-bold text-gray-700">Ucapan otomatis?</span>
         </label>
       </div>
 
-      <button
-        class="w-full py-3 bg-red-500 text-white text-xl rounded-lg shadow hover:bg-red-600 transition duration-300"
+      <Button
+        class="bg-violet-700 hover:bg-red-600"
         type="submit"
         onClick={process}
       >
-        Proses
-      </button>
+        <div class="i-mdi:check-bold text-2xl"></div> Jalankan Perintah
+      </Button>
 
-      <button
-        class="w-full py-3 bg-blue-500 text-white text-lg rounded-lg shadow hover:bg-blue-600 transition duration-300"
+      <Button
+        class="bg-purple-500 hover:bg-blue-600"
         onClick={reset}
       >
-        Reset
-      </button>
+         <div class="i-mdi:restart text-2xl"></div> Ulangi
+      </Button>
     </div>
   )
 }

@@ -24,6 +24,7 @@
     "toastify-js": "^1.12.0"
   },
   "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
     "@types/chrome": "^0.0.280",
     "@types/dom-speech-recognition": "^0.0.4",
     "@types/toastify-js": "^1.12.3",
