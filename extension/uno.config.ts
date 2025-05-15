@@ -10,4 +10,13 @@ export default defineConfig({
       warn: true,
     }),
   ],
+  variants: [
+    (matcher) => {
+      if (!matcher.startsWith('on:')) return matcher
+      return {
+        matcher: matcher.slice(3),
+        selector: s => `${s}:hover, ${s}:focus`,
+      }
+    },
+  ],
 })

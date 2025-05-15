@@ -36,15 +36,15 @@ export default function Popup() {
     <div class="min-w-64 m-4 grid gap-4">
       <textarea
         ref={input}
-        class="border border-gray-300 rounded-lg p-3 text-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+        class="b-2 b-gray-600 rounded-lg p-3 text-lg shadow-sm focus:ring-2 focus:ring-blue-500"
         placeholder="Isi dengan perintah atau pertanyaan"
         rows={4}
       />
 
       <SpeechRecognition auto={auto} input={input} process={process} />
 
-      <div class="border border-gray-300 rounded-lg p-3 bg-yellow-100 shadow-sm text-base">
-        <label class="flex items-center gap-3">
+      <div class="b b-gray-600 rounded-lg bg-yellow-100 shadow-sm text-base">
+        <label class="p-3 flex items-center gap-3">
           <input
             type="checkbox"
             onClick={toggleTts}
@@ -55,8 +55,10 @@ export default function Popup() {
         </label>
       </div>
 
+      <hr class="my-2 b-gray-300" />
+
       <Button
-        class="bg-violet-700 hover:bg-red-600"
+        class="bg-green-600 on:bg-green-800"
         type="submit"
         onClick={process}
       >
@@ -64,10 +66,18 @@ export default function Popup() {
       </Button>
 
       <Button
-        class="bg-purple-500 hover:bg-blue-600"
+        class="bg-purple-500 on:bg-purple-700"
         onClick={reset}
       >
          <div class="i-mdi:restart text-2xl"></div> Ulangi
+      </Button>
+
+      <Button
+        class="bg-gray-500 on:bg-gray-700"
+        type="submit"
+        onClick={shutupTTS}
+      >
+        <div class="i-mdi:volume-off text-2xl"></div> Hentikan Ucapan
       </Button>
     </div>
   )

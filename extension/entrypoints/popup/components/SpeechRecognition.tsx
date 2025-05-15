@@ -96,7 +96,7 @@ export default function SpeechRecognition({
 
   return (
     <Button
-      class="mx-auto bg-red-500 hover:bg-red-600"
+      class="mx-auto bg-red-500 on:bg-red-700"
       onClick={listen}
     >
       <div class={'text-2xl ' + (isListening ? 'i-mdi:microphone-off' : 'i-mdi:microphone')}></div>
