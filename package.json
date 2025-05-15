@@ -1,7 +1,9 @@
 {
   "name": "@bina-ai/monorepo",
   "private": true,
+  "description": "Blind-friendly Intelligent Navigation Assistant. AI-based web assistive technology for the visually impaired ✨",
   "type": "module",
+  "license": "AGPL-3.0",
   "workspaces": [
     "api",
     "extension",

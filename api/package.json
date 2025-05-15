@@ -1,6 +1,7 @@
 {
   "name": "@bina-ai/api",
   "private": true,
+  "description": "API Back-end for BINA AI",
   "version": "1.0.0",
   "description": "",
   "type": "module",
