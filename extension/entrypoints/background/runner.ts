@@ -57,7 +57,7 @@ async function run(msg: PromptMessage): Promise<void> {
         handleMessage({
           type: 'NOTIFY',
           audio: 'error',
-          message: 'Error occured while fetching agent: ' + err.name,
+          message: 'Terjadi kesalahan memanggil AI: ' + err.name,
         })
       })
 
@@ -99,7 +99,7 @@ async function run(msg: PromptMessage): Promise<void> {
     handleMessage({
       type: 'NOTIFY',
       audio: 'process',
-      message: 'Continuing agent...',
+      message: 'Melanjutkan AI...',
     })
 
     // await sleep(5000)
@@ -112,7 +112,7 @@ async function run(msg: PromptMessage): Promise<void> {
     }
   }
 
-  const message = lastAction && lastAction.target ? lastAction.target : 'Max steps reached'
+  const message = lastAction && lastAction.target ? lastAction.target : 'Telah mencapai langkah maksimal'
 
   playTTS(message)
   handleMessage({

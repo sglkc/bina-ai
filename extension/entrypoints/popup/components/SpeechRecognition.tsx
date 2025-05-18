@@ -42,7 +42,7 @@ export default function SpeechRecognition({
       setIsListening(true)
       sendMessage({
         type: 'NOTIFY',
-        message: 'Listening to microphone',
+        message: 'Mendengarkan mikrofon',
         audio: 'listen',
       })
     })
@@ -51,7 +51,7 @@ export default function SpeechRecognition({
       setIsListening(false)
       sendMessage({
         type: 'NOTIFY',
-        message: 'Finished listening',
+        message: 'Selesai mendengarkan',
         audio: 'finish'
       })
 
@@ -69,7 +69,7 @@ export default function SpeechRecognition({
 
       sendMessage({
         type: 'NOTIFY',
-        message: 'Speech recognition error: ' + err.error,
+        message: 'Terjadi kesalahan mengenal suara: ' + err.error,
         audio: 'error'
       })
     })

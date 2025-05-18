@@ -16,6 +16,7 @@ export default defineContentScript({
 
       Toastify({
         position: 'left',
+        duration: 5000,
         // tts already integrated, no need for screen reader
         ariaLive: 'off',
         style: {

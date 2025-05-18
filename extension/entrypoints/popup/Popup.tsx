@@ -16,7 +16,7 @@ export default function Popup() {
   const input = useRef<HTMLTextAreaElement>(null)
 
   const process = () => {
-    sendMessage({ type: 'NOTIFY', message: 'Running agent', audio: 'next_step' })
+    sendMessage({ type: 'NOTIFY', message: 'Menjalankan AI...', audio: 'next_step' })
     sendMessage({ type: 'PROMPT', prompt: input.current!.value })
   }
 
