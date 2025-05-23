@@ -12,8 +12,14 @@ function playAudio(src: string) {
   return audio
 }
 
+// cant access chrome.i18n in offscreen documents
+let LANG = 'en'
+
 // use global audio for pausing
 const tts = new Audio()
+const url = new URL('https://tts-api.netlify.app')
+
+url.searchParams.set('speed', '1.5')
 
 // its possible to pass response function from message listener
 // but can't handle tts on init
@@ -28,11 +34,8 @@ tts.addEventListener('ended', returnListener)
 tts.addEventListener('error', returnListener)
 
 function playTTS(text: string) {
-  const url = new URL('https://tts-api.netlify.app')
-
   url.searchParams.set('text', text)
-  url.searchParams.set('lang', __('lang'))
-  url.searchParams.set('speed', '1.5')
+  url.searchParams.set('lang', LANG)
 
   tts.src = url.toString()
   tts.play()
@@ -64,6 +67,7 @@ chrome.runtime.onMessage.addListener((msg: Message, sender) => {
   const params = new URLSearchParams(location.search)
   const audio = params.get('audio')
   const tts = params.get('tts')
+  LANG = params.get('lang') ?? LANG
 
   if (audio) playAudio(audio)
   if (tts) playTTS(tts)

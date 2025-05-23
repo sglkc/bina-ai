@@ -1,6 +1,22 @@
 import runner from './runner'
 import { getActiveTab } from './utils'
 
+function createOffscreen(msg: AudioMessage | TTSMessage) {
+  const params = new URLSearchParams({ lang: __('lang') })
+
+  if (msg.type === 'TTS' && msg.kind === 'text')
+    params.set('text', msg.text)
+
+  if (msg.type === 'AUDIO' && msg.audio)
+    params.set('audio', msg.audio)
+
+  chrome.offscreen.createDocument({
+    url: `/offscreen.html?${params.toString()}`,
+    reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
+    justification: 'autoplay can not play'
+  }).catch(() => null)
+}
+
 export async function handleMessage(msg: Message) {
   if (typeof msg !== 'object' || !msg.type) return
 
@@ -33,23 +49,8 @@ export async function handleMessage(msg: Message) {
       }
       break
     case 'AUDIO':
-      // create offscreen document for audio autoplay
-      chrome.offscreen.createDocument({
-        url: '/offscreen.html?audio=' + msg.audio,
-        reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
-        justification: 'autoplay can not play'
-      }).catch(() => null)
-      break
     case 'TTS':
-      // listener in offscreen
-      if (msg.kind !== 'text') return
-
-      // create offscreen document for audio autoplay
-      chrome.offscreen.createDocument({
-        url: '/offscreen.html?tts=' + msg.text,
-        reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
-        justification: 'autoplay can not play'
-      }).catch(() => null)
+      createOffscreen(msg)
       break
     default:
       console.error('Undefined message type', msg)
@@ -70,6 +71,6 @@ export default defineBackground(() => {
   chrome.runtime.onInstalled.addListener((e) => {
     if (e.reason === chrome.runtime.OnInstalledReason.INSTALL)
       if (import.meta.env.PROD)
-        chrome.runtime.openOptionsPage()
+      chrome.runtime.openOptionsPage()
   })
 })
