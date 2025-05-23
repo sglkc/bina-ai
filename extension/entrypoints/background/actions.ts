@@ -1,11 +1,10 @@
-import ky from 'ky'
 import {
   Action,
   ActionType,
-  PromptEndpointResponse,
   PromptRequest,
   PromptResponse,
 } from '@bina-ai/types'
+import prompt, { parsePrompt } from './prompt'
 
 export type ActionRunner = (action: Partial<Action>) => boolean
 
@@ -33,20 +32,14 @@ const Runners: Record<ActionType, ActionRunner> = {
 
 export const controller = new AbortController()
 
-const api = ky.create({
-  prefixUrl: 'http://localhost:5000',
-  method: 'post',
-  timeout: 30_000,
-  signal: controller.signal,
-})
-
 export async function getAction(body: Partial<PromptRequest>): Promise<PromptResponse> {
   try {
-    const res = await api<PromptEndpointResponse>('prompt', { json: body }).json()
+    // Parse the prompt and send it to Mistral
+    const content = parsePrompt(body)
+    const messages: any[] = [] // We could persist these for conversation history
 
-    if ('message' in res) throw new Error(res.message)
-
-    return res
+    // Use local prompt function instead of API call
+    return await prompt(content, messages)
   } catch (error) {
     let message = 'Unknown error'
 

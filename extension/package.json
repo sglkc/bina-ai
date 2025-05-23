@@ -16,22 +16,22 @@
   },
   "dependencies": {
     "@bina-ai/types": "workspace:*",
+    "@mistralai/mistralai": "^1.6.1",
     "@preact/preset-vite": "^2.10.1",
     "@unocss/reset": "66.1.0-beta.8",
     "@wxt-dev/i18n": "^0.2.4",
-    "dom-to-semantic-markdown": "^1.3.0",
-    "ky": "^1.8.0",
-    "preact": "^10.26.4",
+    "dom-to-semantic-markdown": "^1.5.0",
+    "preact": "^10.26.6",
     "toastify-js": "^1.12.0"
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.2.3",
     "@types/chrome": "^0.0.280",
     "@types/dom-speech-recognition": "^0.0.4",
-    "@types/toastify-js": "^1.12.3",
+    "@types/toastify-js": "^1.12.4",
     "@wxt-dev/unocss": "^1.0.1",
-    "typescript": "^5.8.2",
+    "typescript": "^5.8.3",
     "unocss": "66.1.0-beta.8",
-    "wxt": "^0.20.0"
+    "wxt": "^0.20.6"
   }
 }
