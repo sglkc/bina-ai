@@ -16,7 +16,7 @@ export default function Popup() {
   const input = useRef<HTMLTextAreaElement>(null)
 
   const process = () => {
-    sendMessage({ type: 'NOTIFY', message: 'Menjalankan AI...', audio: 'next_step' })
+    sendMessage({ type: 'NOTIFY', message: __('notification.running_ai'), audio: 'next_step' })
     sendMessage({ type: 'PROMPT', prompt: input.current!.value })
   }
 
@@ -37,7 +37,7 @@ export default function Popup() {
       <textarea
         ref={input}
         class="b-2 b-gray-600 rounded-lg p-3 text-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-        placeholder="Isi dengan perintah atau pertanyaan"
+        placeholder={__('placeholder.command_input')}
         rows={4}
       />
 
@@ -51,7 +51,7 @@ export default function Popup() {
             defaultChecked={auto}
             class="h-5 w-5"
           />
-          <span class="fw-bold text-gray-700">Ucapan otomatis?</span>
+          <span class="fw-bold text-gray-700">{__('label.auto_speech')}</span>
         </label>
       </div>
 
@@ -62,14 +62,14 @@ export default function Popup() {
         type="submit"
         onClick={process}
       >
-        <div class="i-mdi:check-bold text-2xl"></div> Jalankan Perintah
+        <div class="i-mdi:check-bold text-2xl"></div> {__('button.run_command')}
       </Button>
 
       <Button
         class="bg-purple-500 on:bg-purple-700"
         onClick={reset}
       >
-         <div class="i-mdi:restart text-2xl"></div> Ulangi
+         <div class="i-mdi:restart text-2xl"></div> {__('button.reset')}
       </Button>
 
       <Button
@@ -77,7 +77,7 @@ export default function Popup() {
         type="submit"
         onClick={shutupTTS}
       >
-        <div class="i-mdi:volume-off text-2xl"></div> Hentikan Ucapan
+        <div class="i-mdi:volume-off text-2xl"></div> {__('button.stop_speech')}
       </Button>
     </div>
   )

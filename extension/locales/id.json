@@ -1,0 +1,38 @@
+{
+  "lang": "id",
+  "notification": {
+    "listening": "Mendengarkan mikrofon",
+    "finished_listening": "Selesai mendengarkan",
+    "running_ai": "Menjalankan AI...",
+    "continuing_ai": "Melanjutkan AI...",
+    "speech_recognition_error": "Terjadi kesalahan mengenal suara: $1",
+    "api_error": "Terjadi kesalahan memanggil AI: $1",
+    "max_steps_reached": "Telah mencapai langkah maksimal",
+    "done": "[DONE] $1"
+  },
+  "button": {
+    "start_microphone": "Mulai Berbicara",
+    "stop_microphone": "Hentikan Mikrofon",
+    "run_command": "Jalankan Perintah",
+    "reset": "Ulangi",
+    "stop_speech": "Hentikan Ucapan"
+  },
+  "placeholder": {
+    "command_input": "Isi dengan perintah atau pertanyaan"
+  },
+  "label": {
+    "auto_speech": "Ucapan otomatis?"
+  },
+  "permission": {
+    "success": "Sukses! Penggunaan mikrofon telah diizinkan. Gunakan kombinasi Ctrl+Shift+1 untuk memulai navigasi",
+    "already_granted": "Anda sudah memberikan izin mikrofon",
+    "request": "Untuk penggunaan pertama, mohon izinkan penggunaan mikrofon. Anda bisa menekan tombol Tab sebanyak 3 kali dan tekan tombol Enter",
+    "click_allow": "Klik Izinkan untuk menggunakan mikrofon, Anda bisa menggunakan Tab sebanyak 3x dan Enter",
+    "error": {
+      "not_found": "Mikrofon tidak dapat ditemukan",
+      "not_readable": "Mikrofon diizinkan, namun tidak dapat digunakan",
+      "not_allowed": "Mikrofon tidak diizinkan, silahkan mengulang perizinan dari pengaturan",
+      "security": "Tidak bisa memberi izin, gunakan HTTPS"
+    }
+  }
+}

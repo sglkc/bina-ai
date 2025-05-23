@@ -1,0 +1,38 @@
+{
+  "lang": "en",
+  "notification": {
+    "listening": "Listening to microphone",
+    "finished_listening": "Finished listening",
+    "running_ai": "Running AI...",
+    "continuing_ai": "Continuing AI...",
+    "speech_recognition_error": "Speech recognition error occurred: $1",
+    "api_error": "Error calling AI: $1",
+    "max_steps_reached": "Maximum steps reached",
+    "done": "[DONE] $1"
+  },
+  "button": {
+    "start_microphone": "Start Speaking",
+    "stop_microphone": "Stop Microphone",
+    "run_command": "Run Command",
+    "reset": "Reset",
+    "stop_speech": "Stop Speech"
+  },
+  "placeholder": {
+    "command_input": "Fill with command or question"
+  },
+  "label": {
+    "auto_speech": "Automatic speech?"
+  },
+  "permission": {
+    "success": "Success! Microphone access has been granted. Use Ctrl+Shift+1 to start navigation",
+    "already_granted": "You have already granted microphone permission",
+    "request": "For first use, please allow microphone access. You can press Tab 3 times and press Enter",
+    "click_allow": "Click Allow to use the microphone, you can use Tab 3 times and Enter",
+    "error": {
+      "not_found": "Microphone not found",
+      "not_readable": "Microphone allowed, but cannot be used",
+      "not_allowed": "Microphone not allowed, please repeat permission from settings",
+      "security": "Cannot grant permission, use HTTPS"
+    }
+  }
+}

@@ -42,7 +42,7 @@ export default function SpeechRecognition({
       setIsListening(true)
       sendMessage({
         type: 'NOTIFY',
-        message: 'Mendengarkan mikrofon',
+        message: __('notification.listening'),
         audio: 'listen',
       })
     })
@@ -51,7 +51,7 @@ export default function SpeechRecognition({
       setIsListening(false)
       sendMessage({
         type: 'NOTIFY',
-        message: 'Selesai mendengarkan',
+        message: __('notification.finished_listening'),
         audio: 'finish'
       })
 
@@ -69,7 +69,7 @@ export default function SpeechRecognition({
 
       sendMessage({
         type: 'NOTIFY',
-        message: 'Terjadi kesalahan mengenal suara: ' + err.error,
+        message: __('notification.speech_recognition_error', undefined, [err.error]),
         audio: 'error'
       })
     })
@@ -100,7 +100,7 @@ export default function SpeechRecognition({
       onClick={listen}
     >
       <div class={'text-2xl ' + (isListening ? 'i-mdi:microphone-off' : 'i-mdi:microphone')}></div>
-      {isListening ? 'Hentikan Mikrofon' : 'Mulai Berbicara'}
+      {isListening ? __('button.stop_microphone') : __('button.start_microphone')}
     </Button>
   )
 }

@@ -31,7 +31,7 @@ function playTTS(text: string) {
   const url = new URL('https://tts-api.netlify.app')
 
   url.searchParams.set('text', text)
-  url.searchParams.set('lang', 'id')
+  url.searchParams.set('lang', __('lang'))
   url.searchParams.set('speed', '1.5')
 
   tts.src = url.toString()

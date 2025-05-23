@@ -18,8 +18,7 @@ function App() {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        const message = 'Sukses! Penggunaan mikrofon telah diizinkan. ' +
-          'Gunakan kombinasi Ctrl+Shift+1 untuk memulai navigasi'
+        const message = __('permission.success')
 
         localStorage.setItem('has-mic', 'true')
         stream.getTracks().forEach((track) => track.stop())
@@ -40,16 +39,16 @@ function App() {
 
         switch (error.name) {
           case 'NotFoundError':
-            message += 'Mikrofon tidak dapat ditemukan'
+            message += __('permission.error.not_found')
             break
           case 'NotReadableError':
-            message += 'Mikrofon diizinkan, namun tidak dapat digunakan'
+            message += __('permission.error.not_readable')
             break
           case 'NotAllowedError':
-            message += 'Mikrofon tidak diizinkan, silahkan mengulang perizinan dari pengaturan'
+            message += __('permission.error.not_allowed')
             break
           case 'SecurityError':
-            message += 'Tidak bisa memberi izin, gunakan HTTPS'
+            message += __('permission.error.security')
             break
         }
 
@@ -61,7 +60,7 @@ function App() {
 
   useEffect(() => {
     if (localStorage.getItem('has-mic')) {
-      const message = 'Anda sudah memberikan izin mikrofon'
+      const message = __('permission.already_granted')
 
       bg.current?.classList.add('bg-green-300')
       setMessage(message)
@@ -73,8 +72,7 @@ function App() {
     sendTTS({
       type: 'TTS',
       kind: 'text',
-      text: 'Untuk penggunaan pertama, mohon izinkan penggunaan mikrofon.' +
-        ' Anda bisa menekan tombol Tab sebanyak 3 kali dan tekan tombol Enter',
+      text: __('permission.request'),
     })
   }, [])
 
@@ -86,7 +84,7 @@ function App() {
       disabled={Boolean(message)}
     >
       <hr class="hidden bg-green-300 bg-red-300" />
-      { message ?? 'Klik Izinkan untuk menggunakan mikrofon, Anda bisa menggunakan Tab sebanyak 3x dan Enter' }
+      { message ?? __('permission.click_allow') }
     </button>
   )
 }

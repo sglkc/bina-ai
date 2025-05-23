@@ -57,7 +57,7 @@ async function run(msg: PromptMessage): Promise<void> {
         handleMessage({
           type: 'NOTIFY',
           audio: 'error',
-          message: 'Terjadi kesalahan memanggil AI: ' + err.name,
+          message: __('notification.api_error', undefined, [err.name]),
         })
       })
 
@@ -99,7 +99,7 @@ async function run(msg: PromptMessage): Promise<void> {
     handleMessage({
       type: 'NOTIFY',
       audio: 'process',
-      message: 'Melanjutkan AI...',
+      message: __('notification.continuing_ai'),
     })
 
     // await sleep(5000)
@@ -112,13 +112,13 @@ async function run(msg: PromptMessage): Promise<void> {
     }
   }
 
-  const message = lastAction && lastAction.target ? lastAction.target : 'Telah mencapai langkah maksimal'
+  const message = lastAction && lastAction.target ? lastAction.target : __('notification.max_steps_reached')
 
   playTTS(message)
   handleMessage({
     type: 'NOTIFY',
     audio: 'finish',
-    message: '[DONE] ' + message
+    message: __('notification.done', undefined, [message])
   })
 }
 
