@@ -1,3 +1,5 @@
+import { i18n } from '#imports'
+
 /**
  * Helper function that handles both simple translations and those with substitutions
  * @param key The translation key to use
