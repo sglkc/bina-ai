@@ -24,7 +24,7 @@ export default defineConfig({
         description: 'Open popup and enable speech recognition',
       },
     },
-    default_locale: 'en'
+    default_locale: 'id'
   },
   modules: ['@wxt-dev/unocss', '@wxt-dev/i18n/module'],
   vite: () => ({

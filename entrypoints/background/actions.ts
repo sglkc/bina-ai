@@ -3,7 +3,7 @@ import {
   ActionType,
   PromptRequest,
   PromptResponse,
-} from '@bina-ai/types'
+} from '@/utils/types'
 import prompt, { parsePrompt } from './prompt'
 
 export type ActionRunner = (action: Partial<Action>) => boolean

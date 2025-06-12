@@ -1,4 +1,8 @@
 packages:
-  - 'api'
-  - 'extension'
-  - 'types'
+  - api
+  - extension
+  - types
+
+onlyBuiltDependencies:
+  - esbuild
+  - spawn-sync

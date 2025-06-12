@@ -70,7 +70,7 @@ export default defineBackground(() => {
   // ensure microphone permission for speech recognition on first install
   chrome.runtime.onInstalled.addListener((e) => {
     if (e.reason === chrome.runtime.OnInstalledReason.INSTALL)
-      if (import.meta.env.PROD)
+      // if (import.meta.env.PROD)
       chrome.runtime.openOptionsPage()
   })
 })

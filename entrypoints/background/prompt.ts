@@ -1,10 +1,10 @@
 import { Mistral } from '@mistralai/mistralai'
 import { Messages } from '@mistralai/mistralai/models/components'
-import { PromptContent, PromptRequest } from './types'
+import { PromptContent, PromptRequest, PromptResponse } from '@/utils/types'
 
 let tokens = 0
-const apiKey = process.env.MISTRAL_API_KEY
-const agentId = process.env.MISTRAL_AGENT_ID!
+const apiKey = import.meta.env.VITE_MISTRAL_API_KEY!
+const agentId = import.meta.env.VITE_MISTRAL_AGENT_ID!
 const client = new Mistral({ apiKey })
 
 export function parsePrompt({ page, url, prompt, image }: Partial<PromptRequest>): PromptContent {
@@ -26,7 +26,7 @@ export function parsePrompt({ page, url, prompt, image }: Partial<PromptRequest>
   ]
 }
 
-export default async function prompt(content: PromptContent, messages: Messages[]) {
+export default async function prompt(content: PromptContent, messages: Messages[] = []): Promise<PromptResponse> {
   const start = Date.now()
 
   console.info('> generating message')

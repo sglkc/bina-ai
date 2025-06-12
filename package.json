@@ -1,19 +1,36 @@
 {
-  "name": "@bina-ai/monorepo",
+  "name": "bina-ai",
   "private": true,
   "description": "Blind-friendly Intelligent Navigation Assistant. AI-based web assistive technology for the visually impaired ✨",
+  "version": "0.0.1",
   "type": "module",
-  "license": "AGPL-3.0",
-  "workspaces": [
-    "api",
-    "extension",
-    "types"
-  ],
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "dtrace-provider",
-      "esbuild",
-      "spawn-sync"
-    ]
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "@mistralai/mistralai": "^1.6.1",
+    "@preact/preset-vite": "^2.10.1",
+    "@unocss/reset": "66.1.0-beta.8",
+    "@wxt-dev/i18n": "^0.2.4",
+    "dom-to-semantic-markdown": "^1.5.0",
+    "preact": "^10.26.6",
+    "toastify-js": "^1.12.0"
+  },
+  "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
+    "@types/chrome": "^0.0.280",
+    "@types/dom-speech-recognition": "^0.0.4",
+    "@types/toastify-js": "^1.12.4",
+    "@wxt-dev/unocss": "^1.0.1",
+    "typescript": "^5.8.3",
+    "unocss": "66.1.0-beta.8",
+    "wxt": "^0.20.6"
   }
 }
