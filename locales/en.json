@@ -34,5 +34,15 @@
       "not_allowed": "Microphone not allowed, please repeat permission from settings",
       "security": "Cannot grant permission, use HTTPS"
     }
+  },
+  "api_key": {
+    "title": "Enter Mistral API Key to continue",
+    "placeholder": "Enter Mistral API Key...",
+    "button_save": "Save API Key",
+    "button_saving": "Saving...",
+    "error_empty": "API Key cannot be empty",
+    "error_save": "Failed to save API Key",
+    "success_save": "API Key saved successfully!",
+    "redirecting": "Redirecting to microphone settings..."
   }
 }

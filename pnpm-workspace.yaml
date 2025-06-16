@@ -1,8 +1,0 @@
-packages:
-  - api
-  - extension
-  - types
-
-onlyBuiltDependencies:
-  - esbuild
-  - spawn-sync

@@ -34,5 +34,15 @@
       "not_allowed": "Mikrofon tidak diizinkan, silahkan mengulang perizinan dari pengaturan",
       "security": "Tidak bisa memberi izin, gunakan HTTPS"
     }
+  },
+  "api_key": {
+    "title": "Masukkan API Key Mistral untuk melanjutkan",
+    "placeholder": "Masukkan API Key Mistral...",
+    "button_save": "Simpan API Key",
+    "button_saving": "Menyimpan...",
+    "error_empty": "API Key tidak boleh kosong",
+    "error_save": "Gagal menyimpan API Key",
+    "success_save": "API Key berhasil disimpan!",
+    "redirecting": "Mengarahkan ke pengaturan mikrofon..."
   }
 }

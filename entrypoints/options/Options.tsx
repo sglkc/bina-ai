@@ -2,6 +2,7 @@ import { render } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import '@unocss/reset/tailwind-compat.css'
 import 'virtual:uno.css'
+import APIKey from './APIKey'
 
 // TODO: Text-to-speech instructions
 function App() {
@@ -89,4 +90,25 @@ function App() {
   )
 }
 
-render(<App />, document.getElementById('root')!)
+function Main() {
+  const [hasApiKey, setHasApiKey] = useState<boolean>(false)
+
+  useEffect(() => {
+    // Check if API key exists in chrome.storage.local
+    chrome.storage.local.get(['mistral_api_key']).then((result) => {
+      setHasApiKey(Boolean(result.mistral_api_key))
+    })
+  }, [])
+
+  const onApiKeySet = () => {
+    setHasApiKey(true)
+  }
+
+  if (!hasApiKey) {
+    return <APIKey onApiKeySet={onApiKeySet} />
+  }
+
+  return <App />
+}
+
+render(<Main />, document.getElementById('root')!)

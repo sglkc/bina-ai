@@ -1,11 +1,32 @@
 import { Mistral } from '@mistralai/mistralai'
 import { Messages } from '@mistralai/mistralai/models/components'
-import { PromptContent, PromptRequest, PromptResponse } from '@/utils/types'
+import { PromptContent, PromptRequest, PromptResponse } from '../../utils/types'
 
 let tokens = 0
-const apiKey = import.meta.env.VITE_MISTRAL_API_KEY!
-const agentId = import.meta.env.VITE_MISTRAL_AGENT_ID!
-const client = new Mistral({ apiKey })
+const agentId = 'ag:f54ec292:20250410:bina-ai:ca935324'
+
+// Dynamic client creation based on stored API key
+let client: Mistral | null = null
+
+async function getClient(): Promise<Mistral> {
+  if (client) return client
+
+  // Get API key from chrome.storage.local
+  const result = await chrome.storage.local.get(['mistral_api_key'])
+  const apiKey = result.mistral_api_key
+
+  if (!apiKey) {
+    throw new Error('Mistral API key not found. Please configure your API key in the extension options.')
+  }
+
+  client = new Mistral({ apiKey })
+  return client
+}
+
+// Reset client when API key changes (useful for testing or key updates)
+export function resetClient() {
+  client = null
+}
 
 export function parsePrompt({ page, url, prompt, image }: Partial<PromptRequest>): PromptContent {
   console.log('>> generating content', page?.length, '/', url?.substring(0, 20), ':', prompt)
@@ -33,6 +54,7 @@ export default async function prompt(content: PromptContent, messages: Messages[
 
   messages.push({ role: 'user', content })
 
+  const client = await getClient()
   const response = await client.agents.complete({
     agentId,
     messages,

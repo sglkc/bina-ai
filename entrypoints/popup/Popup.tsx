@@ -12,7 +12,7 @@ const reset = () => {
 }
 
 export default function Popup() {
-  const [auto, setAuto] = useState<boolean>(!localStorage.getItem('auto-tts'))
+  const [auto, setAuto] = useState<boolean>(!!localStorage.getItem('auto-tts'))
   const input = useRef<HTMLTextAreaElement>(null)
 
   const process = () => {
@@ -28,6 +28,7 @@ export default function Popup() {
         localStorage.setItem('auto-tts', 'true')
       }
 
+      console.log(state, localStorage.getItem('auto-tts'))
       return !!localStorage.getItem('auto-tts')
     })
   }

@@ -6,7 +6,7 @@ export default defineConfig({
     name: 'BINA: Blind-friendly Intelligent Navigation Assistant',
     description: 'AI-based web assistive technology for the visually impaired',
     short_name: 'BINA AI',
-    permissions: ['activeTab', 'offscreen', 'scripting'],
+    permissions: ['activeTab', 'offscreen', 'scripting', 'storage'],
     host_permissions: ['<all_urls>'],
     web_accessible_resources: [
       {

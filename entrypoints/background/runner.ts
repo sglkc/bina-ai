@@ -64,8 +64,10 @@ async function run(msg: PromptMessage): Promise<void> {
     if (!action) break
 
     // apply user session if empty
-    if (!session)
+    if (!session) {
       session = action.session
+      console.log('session empty, applying new session')
+    }
 
     if (action.intent !== action.target) {
       handleMessage({

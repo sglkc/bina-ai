@@ -28,8 +28,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build extension
-        run: pnpm run build
+      - name: Test
+        run: pnpm run compile
 
       - name: Zip extension
         run: pnpm run zip

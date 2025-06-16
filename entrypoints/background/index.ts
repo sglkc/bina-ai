@@ -38,6 +38,7 @@ export async function handleMessage(msg: Message) {
       break
     case 'RESET-SESSION':
       runner.session = undefined
+      console.log('reseted session')
       break
     case 'NOTIFY':
       // forward audio
