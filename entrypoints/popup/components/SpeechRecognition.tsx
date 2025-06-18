@@ -69,7 +69,7 @@ export default function SpeechRecognition({
 
       sendMessage({
         type: 'NOTIFY',
-        message: __('notification.speech_recognition_error', undefined, [err.error]),
+        message: __('notification.speech_recognition_error', [err.error]),
         audio: 'error'
       })
     })

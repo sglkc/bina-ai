@@ -57,7 +57,7 @@ async function run(msg: PromptMessage): Promise<void> {
         handleMessage({
           type: 'NOTIFY',
           audio: 'error',
-          message: __('notification.api_error', undefined, [err.name]),
+          message: __('notification.api_error', [err.name]),
         })
       })
 
@@ -120,7 +120,7 @@ async function run(msg: PromptMessage): Promise<void> {
   handleMessage({
     type: 'NOTIFY',
     audio: 'finish',
-    message: __('notification.done', undefined, [message])
+    message: __('notification.done', [message])
   })
 }
 
