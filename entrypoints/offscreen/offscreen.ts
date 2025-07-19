@@ -15,8 +15,9 @@ function playAudio(src: string) {
 // use global audio for pausing
 const tts = new Audio()
 const url = new URL('https://tts-api.netlify.app')
+let language = 'en'
 
-url.searchParams.set('speed', '1.5')
+url.searchParams.set('speed', '1.25')
 
 // its possible to pass response function from message listener
 // but can't handle tts on init
@@ -32,7 +33,7 @@ tts.addEventListener('error', returnListener)
 
 function playTTS(text: string) {
   url.searchParams.set('text', text)
-  url.searchParams.set('lang', 'auto')
+  url.searchParams.set('lang', language)
 
   tts.src = url.toString()
   tts.play()
@@ -64,7 +65,9 @@ chrome.runtime.onMessage.addListener((msg: Message, sender) => {
   const params = new URLSearchParams(location.search)
   const audio = params.get('audio')
   const tts = params.get('tts')
+  const lang = params.get('lang')
 
   if (audio) playAudio(audio)
   if (tts) playTTS(tts)
+  if (lang) language = lang
 }

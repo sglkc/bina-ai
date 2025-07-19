@@ -14,6 +14,8 @@ async function run(msg: PromptMessage): Promise<void> {
   let lastPage = ''
   let steps = 0
 
+  session = crypto.randomUUID()
+
   while (steps < maxSteps) {
     // wait for tab id if empty
     const { id: tabId, url, status } = await getActiveTab()
@@ -51,8 +53,10 @@ async function run(msg: PromptMessage): Promise<void> {
     const newPage = injection.result ?? ''
     const page = newPage !== lastPage ? newPage : undefined
 
+    if (!session) return
+
     // fetch action from api
-    const action = await getAction({ session, url, prompt, page })
+    const action = await getAction({ url, prompt, page })
       .catch((err: Error) => {
         handleMessage({
           type: 'NOTIFY',
@@ -63,11 +67,7 @@ async function run(msg: PromptMessage): Promise<void> {
 
     if (!action) break
 
-    // apply user session if empty
-    if (!session) {
-      session = action.session
-      console.log('session empty, applying new session')
-    }
+    if (!session) return
 
     if (action.intent !== action.target) {
       handleMessage({
