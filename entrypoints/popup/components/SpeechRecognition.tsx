@@ -3,13 +3,13 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import Button from './Button'
 
 export interface SpeechRecognitionProps {
-  auto: boolean
+  auto?: boolean
   input: RefObject<HTMLTextAreaElement>
   process: () => void
 }
 
 export default function SpeechRecognition({
-  auto,
+  auto = false,
   input,
   process,
 }: SpeechRecognitionProps) {
