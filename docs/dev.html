@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BINA AI - Dokumentasi</title>
+    <meta name="description" content="Dokumentasi lengkap untuk BINA AI Chrome Extension">
+
+    <style>
+        :root {
+            --color-text: #1a1a1a;
+            --color-text-secondary: #666;
+            --color-background: #ffffff;
+            --color-accent: #0066cc;
+            --color-accent-hover: #0052a3;
+            --color-border: #e1e5e9;
+            --color-code-bg: #f8f9fa;
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --max-width: 1200px;
+            --sidebar-width: 280px;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: var(--color-background);
+            border-right: 1px solid var(--color-border);
+            padding: var(--spacing-xl) var(--spacing-lg);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            margin: 0 0 var(--spacing-lg) 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .toc {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc li {
+            margin: 0;
+        }
+
+        .toc a {
+            display: block;
+            padding: var(--spacing-sm) var(--spacing-md);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-weight: 400;
+        }
+
+        .toc a:hover,
+        .toc a:focus {
+            background-color: var(--color-code-bg);
+            color: var(--color-accent);
+            outline: 2px solid transparent;
+        }
+
+        .toc a:focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+        }
+
+        .toc .toc-level-2 {
+            padding-left: var(--spacing-lg);
+            font-size: 0.9rem;
+        }
+
+        .main-content {
+            padding: var(--spacing-2xl) var(--spacing-xl);
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 var(--spacing-lg) 0;
+            color: var(--color-text);
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            margin: var(--spacing-2xl) 0 var(--spacing-lg) 0;
+            color: var(--color-text);
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: var(--spacing-xl) 0 var(--spacing-md) 0;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        p {
+            margin: 0 0 var(--spacing-lg) 0;
+            line-height: 1.7;
+        }
+
+        .lead {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        code {
+            background-color: var(--color-code-bg);
+            padding: 0.125rem 0.25rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+        }
+
+        pre {
+            background-color: var(--color-code-bg);
+            padding: var(--spacing-lg);
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: var(--spacing-lg) 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--color-accent-hover);
+            text-decoration: underline;
+        }
+
+        a:focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
+        .section {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .feature-card {
+            padding: var(--spacing-lg);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background-color: var(--color-background);
+        }
+
+        .feature-card h4 {
+            margin: 0 0 var(--spacing-sm) 0;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .feature-card p {
+            margin: 0;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+                padding: var(--spacing-lg);
+            }
+
+            .main-content {
+                padding: var(--spacing-lg);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .toc a {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar" role="navigation" aria-label="Daftar isi">
+            <h2>Daftar Isi</h2>
+            <ul class="toc">
+                <li><a href="#tentang">Tentang BINA AI</a></li>
+                <li><a href="#instalasi">Instalasi</a></li>
+                <li><a href="#fitur">Fitur Utama</a>
+                    <ul>
+                        <li><a href="#speech-recognition" class="toc-level-2">Speech Recognition</a></li>
+                        <li><a href="#markdown-parsing" class="toc-level-2">Markdown Parsing</a></li>
+                        <li><a href="#toast-notifications" class="toc-level-2">Toast Notifications</a></li>
+                    </ul>
+                </li>
+                <li><a href="#konfigurasi">Konfigurasi</a></li>
+                <li><a href="#penggunaan">Cara Penggunaan</a></li>
+                <li><a href="#pengembangan">Pengembangan</a></li>
+                <li><a href="#kontribusi">Kontribusi</a></li>
+                <li><a href="#lisensi">Lisensi</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content" role="main">
+            <header class="section">
+                <h1 id="tentang">BINA AI</h1>
+                <p class="lead">Chrome extension modern dengan dukungan AI untuk meningkatkan produktivitas browsing Anda dengan fitur speech recognition, markdown parsing, dan notifikasi yang elegan.</p>
+            </header>
+
+            <section class="section">
+                <h2 id="instalasi">Instalasi</h2>
+                <p>Untuk menginstall BINA AI Chrome Extension, ikuti langkah-langkah berikut:</p>
+
+                <h3>Dari Source Code</h3>
+                <pre><code># Clone repository
+git clone https://github.com/username/bina-ai.git
+cd bina-ai
+
+# Install dependencies
+pnpm install
+
+# Build extension
+pnpm run build
+
+# Load ke Chrome
+# 1. Buka chrome://extensions/
+# 2. Enable "Developer mode"
+# 3. Klik "Load unpacked"
+# 4. Pilih folder .output/chrome-mv3</code></pre>
+            </section>
+
+            <section class="section">
+                <h2 id="fitur">Fitur Utama</h2>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🎤 Speech Recognition</h4>
+                        <p>Kontrol extension menggunakan perintah suara dengan teknologi speech recognition yang akurat.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📝 Markdown Support</h4>
+                        <p>Parsing dan rendering markdown content dengan dukungan syntax highlighting.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔔 Toast Notifications</h4>
+                        <p>Sistem notifikasi yang elegan dengan berbagai tingkat prioritas dan audio feedback.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌐 Multi-language</h4>
+                        <p>Dukungan internasionalisasi dengan bahasa Indonesia dan Inggris.</p>
+                    </div>
+                </div>
+
+                <h3 id="speech-recognition">Speech Recognition</h3>
+                <p>Fitur speech recognition memungkinkan Anda untuk mengontrol extension menggunakan perintah suara. Komponen ini diimplementasikan dalam <code>entrypoints/popup/components/SpeechRecognition.tsx</code>.</p>
+
+                <h3 id="markdown-parsing">Markdown Parsing</h3>
+                <p>Extension dapat memproses dan menampilkan content markdown secara real-time. Modul ini dapat ditemukan di <code>entrypoints/markdown.content.ts</code>.</p>
+
+                <h3 id="toast-notifications">Toast Notifications</h3>
+                <p>Sistem notifikasi yang comprehensive dengan audio feedback dan berbagai gaya visual. Implementasi tersedia di <code>entrypoints/toast.content.ts</code>.</p>
+            </section>
+
+            <section class="section">
+                <h2 id="konfigurasi">Konfigurasi</h2>
+                <p>Extension dapat dikonfigurasi melalui halaman options yang dapat diakses dari popup atau melalui pengaturan Chrome.</p>
+
+                <h3>API Key</h3>
+                <p>Untuk menggunakan fitur AI, Anda perlu mengatur API key di halaman options. Komponen konfigurasi API key tersedia di <code>entrypoints/options/APIKey.tsx</code>.</p>
+
+                <pre><code># Setup environment variables
+cp .env.example .env
+
+# Edit .env file dengan API keys yang diperlukan
+OPENAI_API_KEY=your_api_key_here</code></pre>
+            </section>
+
+            <section class="section">
+                <h2 id="penggunaan">Cara Penggunaan</h2>
+
+                <h3>Menggunakan Popup</h3>
+                <p>Klik icon extension di toolbar Chrome untuk membuka popup interface. Dari sini Anda dapat:</p>
+                <ul>
+                    <li>Mengaktifkan speech recognition</li>
+                    <li>Mengakses pengaturan extension</li>
+                    <li>Melihat status extension</li>
+                </ul>
+
+                <h3>Background Actions</h3>
+                <p>Extension berjalan di background dan dapat melakukan berbagai aksi otomatis seperti:</p>
+                <ul>
+                    <li>Monitoring aktivitas tab</li>
+                    <li>Pemrosesan perintah AI</li>
+                    <li>Sinkronisasi data</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2 id="pengembangan">Pengembangan</h2>
+
+                <h3>Tech Stack</h3>
+                <ul>
+                    <li><strong>Framework:</strong> WXT (Web Extension Toolkit)</li>
+                    <li><strong>UI:</strong> React + TypeScript</li>
+                    <li><strong>Styling:</strong> UnoCSS</li>
+                    <li><strong>Build Tool:</strong> Vite</li>
+                    <li><strong>Package Manager:</strong> pnpm</li>
+                </ul>
+
+                <h3>Development Commands</h3>
+                <pre><code># Start development server
+pnpm run dev
+
+# Build for production
+pnpm run build
+
+# Type checking
+pnpm run type-check
+
+# Linting
+pnpm run lint</code></pre>
+
+                <h3>Struktur Project</h3>
+                <pre><code>bina-ai/
+├── entrypoints/          # Extension entry points
+│   ├── background/       # Background scripts
+│   ├── popup/           # Popup interface
+│   ├── options/         # Options page
+│   └── offscreen/       # Offscreen documents
+├── utils/               # Shared utilities
+├── locales/            # Internationalization
+├── public/             # Static assets
+└── docs/               # Documentation</code></pre>
+            </section>
+
+            <section class="section">
+                <h2 id="kontribusi">Kontribusi</h2>
+                <p>Kami menyambut kontribusi dari komunitas! Berikut cara untuk berkontribusi:</p>
+
+                <ol>
+                    <li>Fork repository ini</li>
+                    <li>Buat branch feature baru (<code>git checkout -b feature/amazing-feature</code>)</li>
+                    <li>Commit perubahan Anda (<code>git commit -m 'Add some amazing feature'</code>)</li>
+                    <li>Push ke branch (<code>git push origin feature/amazing-feature</code>)</li>
+                    <li>Buat Pull Request</li>
+                </ol>
+
+                <h3>Guidelines</h3>
+                <ul>
+                    <li>Pastikan code mengikuti style guide yang ada</li>
+                    <li>Tambahkan tests untuk fitur baru</li>
+                    <li>Update dokumentasi jika diperlukan</li>
+                    <li>Gunakan commit message yang descriptive</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2 id="lisensi">Lisensi</h2>
+                <p>Project ini dilisensikan under MIT License. Lihat file <code>LICENSE</code> untuk detail lengkap.</p>
+
+                <p>© 2025 BINA AI. Dibuat dengan ❤️ untuk komunitas developer Indonesia.</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Smooth scrolling untuk internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active section in TOC
+        const observerOptions = {
+            rootMargin: '-20% 0% -35% 0%'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                const tocLink = document.querySelector(`.toc a[href="#${id}"]`);
+
+                if (entry.isIntersecting) {
+                    // Remove active class from all TOC links
+                    document.querySelectorAll('.toc a').forEach(link => {
+                        link.style.backgroundColor = '';
+                        link.style.color = '';
+                    });
+
+                    // Add active state to current section
+                    if (tocLink) {
+                        tocLink.style.backgroundColor = 'var(--color-code-bg)';
+                        tocLink.style.color = 'var(--color-accent)';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all headings with IDs
+        document.querySelectorAll('h1[id], h2[id], h3[id]').forEach(heading => {
+            observer.observe(heading);
+        });
+    </script>
+</body>
+</html>

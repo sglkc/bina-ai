@@ -33,6 +33,6 @@ build
 *.html
 *.sqlite
 
-!**/index.html
+!docs/*
 !**/prompt.txt
 !README.md
