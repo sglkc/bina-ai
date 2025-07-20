@@ -11,11 +11,12 @@ export default function Button(props: ButtonProps) {
       {...props}
       class={[
         `group w-full px-2 py-3 bg-black text-left text-white text-lg rounded-lg`,
-        `b-2 b-black shadow-lg transition duration-300 flex gap-2 items-center`,
+        `shadow-sm transition-border duration-300 flex gap-2 items-center`,
+        `ring-2 ring-black b-yellow-300 on:b-6`,
         props.class
       ].join(' ')}
     >
-      <div class={`${props.icon} text-4xl transition-[font-size] group-focus:text-5xl group-hover:text-5xl`}></div>
+      <div class={`${props.icon} text-4xl group-hover:text-5xl group-focus:text-5xl`}></div>
       <div class="flex flex-col line-height-normal">
         {props.children}
       </div>

@@ -11,17 +11,17 @@
     "done": "[DONE] $1"
   },
   "button": {
-    "start_microphone": "Mulai Berbicara",
+    "start_microphone": "Nyalakan Mikrofon",
     "stop_microphone": "Hentikan Mikrofon",
     "run_command": "Jalankan Perintah",
-    "reset": "Ulangi",
+    "reset": "Ulangi Percakapan",
     "stop_speech": "Hentikan Ucapan"
   },
   "placeholder": {
-    "command_input": "Isi dengan perintah atau pertanyaan"
+    "command_input": "Ketik atau bicara untuk memulai interaksi"
   },
   "label": {
-    "auto_speech": "Ucapan otomatis?"
+    "auto_speech": "Nyalakan mikrofon otomatis?",
   },
   "permission": {
     "success": "Sukses! Penggunaan mikrofon telah diizinkan. Gunakan kombinasi Ctrl+Shift+1 untuk memulai navigasi",

@@ -26,12 +26,12 @@ export default function Popup() {
 
       <textarea
         ref={input}
-        class="b-2 b-black rounded-lg p-3 text-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+        class="ring-2 ring-black rounded-lg p-3 text-lg shadow-sm transition-border b-yellow-300 on:b-6"
         placeholder={__('placeholder.command_input')}
         rows={4}
       />
 
-      <SpeechRecognition input={input} process={process} />
+      <SpeechRecognition input={input} process={process} auto />
 
       <Button
         class="bg-green-500 on:bg-green-700"

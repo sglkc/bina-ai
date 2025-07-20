@@ -55,7 +55,7 @@ export default function SpeechRecognition({
         audio: 'finish'
       })
 
-      if (auto) process()
+      if (auto && input.current?.value.length) process()
     })
 
     recognition.addEventListener('error', async (err) => {
