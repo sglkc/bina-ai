@@ -10,6 +10,11 @@ export default defineConfig({
       warn: true,
     }),
   ],
+  theme: {
+    fontFamily: {
+      "open-sauce": '"Open Sauce One", sans-serif',
+    },
+  },
   variants: [
     (matcher) => {
       if (!matcher.startsWith('on:')) return matcher
