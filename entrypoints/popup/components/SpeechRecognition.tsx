@@ -98,9 +98,12 @@ export default function SpeechRecognition({
     <Button
       class="mx-auto bg-red-500 on:bg-red-700"
       onClick={listen}
+      icon={isListening ? 'i-mdi:microphone-off' : 'i-mdi:microphone'}
     >
-      <div class={'text-2xl ' + (isListening ? 'i-mdi:microphone-off' : 'i-mdi:microphone')}></div>
-      {isListening ? __('button.stop_microphone') : __('button.start_microphone')}
+      <p class="fw-bold">
+        {isListening ? __('button.stop_microphone') : __('button.start_microphone')}
+      </p>
+      <small class="text-xs">Ctrl + Shift + 1</small>
     </Button>
   )
 }
