@@ -1,3 +1,4 @@
+import { runningStorage } from '../../utils/storage'
 import { controller, getAction, getActionRunner } from './actions'
 import { handleMessage } from './index'
 import { getActiveTab, playTTS, sleep } from './utils'
@@ -27,9 +28,9 @@ async function run(msg: PromptMessage): Promise<void> {
 
   const sessionId = crypto.randomUUID()
   await setSession(sessionId)
-  
+
   // Set runner status in session storage
-  await chrome.storage.session.set({ runnerActive: true })
+  await runningStorage.setValue(true)
 
   while (steps < maxSteps) {
     // Check if session still exists, stop if cleared
@@ -141,7 +142,7 @@ async function run(msg: PromptMessage): Promise<void> {
 
   // Clear session and runner status from session storage
   await clearSession()
-  await chrome.storage.session.remove('runnerActive')
+  await runningStorage.setValue(false)
 
   playTTS(message)
   handleMessage({
@@ -156,7 +157,7 @@ async function stop() {
   stopped = true
   // Clear session and runner status when stopped
   await clearSession()
-  await chrome.storage.session.remove('runnerActive')
+  await runningStorage.setValue(false)
 }
 
 export default {

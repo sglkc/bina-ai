@@ -1,20 +1,19 @@
 import { RefObject } from 'preact'
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { MutableRef, useEffect, useState } from 'preact/hooks'
 import Button from './Button'
 
 export interface SpeechRecognitionProps {
-  auto?: boolean
   input: RefObject<HTMLTextAreaElement>
+  speechRecognition: MutableRef<SpeechRecognition>
   process: () => void
 }
 
 export default function SpeechRecognition({
-  auto = false,
   input,
+  speechRecognition,
   process,
 }: SpeechRecognitionProps) {
   const [isListening, setIsListening] = useState<boolean>(false)
-  const speechRecognition = useRef<SpeechRecognition>(null)
 
   const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj)
     .catch(() => null)
@@ -28,9 +27,7 @@ export default function SpeechRecognition({
   }
 
   useEffect(() => {
-    if (!speechRecognition.current) {
-      speechRecognition.current = new webkitSpeechRecognition()
-    }
+    if (!speechRecognition.current) return
 
     const recognition = speechRecognition.current
     recognition.lang = 'id'
@@ -55,7 +52,7 @@ export default function SpeechRecognition({
         audio: 'finish'
       })
 
-      if (auto && input.current?.value.length) process()
+      if (input.current?.value.length) process()
     })
 
     recognition.addEventListener('error', async (err) => {
@@ -82,9 +79,6 @@ export default function SpeechRecognition({
 
       input.current.value = all
     })
-
-    // auto tts if checked
-    if (auto) listen()
 
     // command listener for auto toggle
     chrome.commands.onCommand.addListener((command) => {

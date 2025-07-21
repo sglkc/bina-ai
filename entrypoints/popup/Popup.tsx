@@ -1,6 +1,7 @@
-import { useRef, useEffect, useState } from 'preact/hooks'
+import { useRef, useEffect } from 'preact/hooks'
 import SpeechRecognition from './components/SpeechRecognition'
 import Button from './components/Button'
+import { runningStorage } from '../../utils/storage'
 
 const sendMessage = (obj: Message) => chrome.runtime.sendMessage<Message>(obj).catch(() => null)
 
@@ -12,7 +13,7 @@ const reset = () => {
 
 export default function Popup() {
   const input = useRef<HTMLTextAreaElement>(null)
-  const [isRunnerActive, setIsRunnerActive] = useState(false)
+  const speechRecognition = useRef<SpeechRecognition>(new webkitSpeechRecognition())
 
   const process = () => {
     sendMessage({ type: 'NOTIFY', message: __('notification.running_ai'), audio: 'next_step' })
@@ -20,23 +21,11 @@ export default function Popup() {
   }
 
   useEffect(() => {
-    // Check runner status on mount
-    chrome.storage.session.get('runnerActive').then((result) => {
-      setIsRunnerActive(!!result.runnerActive)
+    // Check runner status on mount, if not running then auto listen mic
+    runningStorage.getValue().then((active) => {
+      if (active) return
+      speechRecognition.current?.start()
     })
-
-    // Listen for storage changes
-    const handleStorageChange = (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (changes.runnerActive) {
-        setIsRunnerActive(!!changes.runnerActive.newValue)
-      }
-    }
-
-    chrome.storage.session.onChanged.addListener(handleStorageChange)
-
-    return () => {
-      chrome.storage.session.onChanged.removeListener(handleStorageChange)
-    }
   }, [])
 
   return (
@@ -52,7 +41,11 @@ export default function Popup() {
         rows={4}
       />
 
-      <SpeechRecognition input={input} process={process} auto={!isRunnerActive} />
+      <SpeechRecognition
+        input={input}
+        process={process}
+        speechRecognition={speechRecognition}
+      />
 
       <Button
         class="bg-green-500 on:bg-green-700"
