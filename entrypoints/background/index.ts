@@ -36,7 +36,7 @@ export async function handleMessage(msg: Message) {
     case 'NOTIFY':
       // Send toast message via storage
       if (msg.message) {
-        chrome.storage.session.set({ toastMessage: msg.message })
+        toastStorage.setValue(msg.message)
       }
       // forward audio
       if (msg.audio) {
