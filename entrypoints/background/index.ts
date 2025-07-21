@@ -1,5 +1,4 @@
 import runner from './runner'
-import { getActiveTab } from './utils'
 
 function createOffscreen(msg: AudioMessage | TTSMessage) {
   const params = new URLSearchParams({ lang: __('lang') })
@@ -20,12 +19,6 @@ function createOffscreen(msg: AudioMessage | TTSMessage) {
 export async function handleMessage(msg: Message) {
   if (typeof msg !== 'object' || !msg.type) return
 
-  // forward to content scripts
-  const { id: tabId } = await getActiveTab()
-  if (tabId) {
-    chrome.tabs.sendMessage(tabId, msg).catch(() => null)
-  }
-
   // forward to other things (popup or offscreen)
   chrome.runtime.sendMessage(msg).catch(() => null)
 
@@ -41,6 +34,10 @@ export async function handleMessage(msg: Message) {
       console.log('reseted session')
       break
     case 'NOTIFY':
+      // Send toast message via storage
+      if (msg.message) {
+        chrome.storage.session.set({ toastMessage: msg.message })
+      }
       // forward audio
       if (msg.audio) {
         handleMessage({
