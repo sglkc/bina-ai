@@ -2,11 +2,22 @@ import { controller, getAction, getActionRunner } from './actions'
 import { handleMessage } from './index'
 import { getActiveTab, playTTS, sleep } from './utils'
 
-let session: string | undefined
-
 let maxSteps: number = 5
 
 let stopped: boolean = false
+
+async function getSession(): Promise<string | undefined> {
+  const result = await chrome.storage.session.get('runnerSession')
+  return result.runnerSession
+}
+
+async function setSession(sessionId: string): Promise<void> {
+  await chrome.storage.session.set({ runnerSession: sessionId })
+}
+
+async function clearSession(): Promise<void> {
+  await chrome.storage.session.remove('runnerSession')
+}
 
 async function run(msg: PromptMessage): Promise<void> {
   const { prompt } = msg
@@ -14,9 +25,17 @@ async function run(msg: PromptMessage): Promise<void> {
   let lastPage = ''
   let steps = 0
 
-  session = crypto.randomUUID()
+  const sessionId = crypto.randomUUID()
+  await setSession(sessionId)
+  
+  // Set runner status in session storage
+  await chrome.storage.session.set({ runnerActive: true })
 
   while (steps < maxSteps) {
+    // Check if session still exists, stop if cleared
+    const currentSession = await getSession()
+    if (!currentSession) return
+
     // wait for tab id if empty
     const { id: tabId, url, status } = await getActiveTab()
 
@@ -53,7 +72,9 @@ async function run(msg: PromptMessage): Promise<void> {
     const newPage = injection.result ?? ''
     const page = newPage !== lastPage ? newPage : undefined
 
-    if (!session) return
+    // Check session again before API call
+    const sessionCheck = await getSession()
+    if (!sessionCheck) return
 
     // fetch action from api
     const action = await getAction({ url, prompt, page })
@@ -67,7 +88,9 @@ async function run(msg: PromptMessage): Promise<void> {
 
     if (!action) break
 
-    if (!session) return
+    // Check session again before action execution
+    const sessionCheck2 = await getSession()
+    if (!sessionCheck2) return
 
     if (action.intent !== action.target) {
       handleMessage({
@@ -116,6 +139,10 @@ async function run(msg: PromptMessage): Promise<void> {
 
   const message = lastAction && lastAction.target ? lastAction.target : __('notification.max_steps_reached')
 
+  // Clear session and runner status from session storage
+  await clearSession()
+  await chrome.storage.session.remove('runnerActive')
+
   playTTS(message)
   handleMessage({
     type: 'NOTIFY',
@@ -124,13 +151,16 @@ async function run(msg: PromptMessage): Promise<void> {
   })
 }
 
-function stop() {
+async function stop() {
   controller.abort()
   stopped = true
+  // Clear session and runner status when stopped
+  await clearSession()
+  await chrome.storage.session.remove('runnerActive')
 }
 
 export default {
-  session,
+  getSession,
   maxSteps,
   run,
   stop,

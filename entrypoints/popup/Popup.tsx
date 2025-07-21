@@ -1,4 +1,4 @@
-import { useRef, useState } from 'preact/hooks'
+import { useRef, useEffect, useState } from 'preact/hooks'
 import SpeechRecognition from './components/SpeechRecognition'
 import Button from './components/Button'
 
@@ -12,11 +12,32 @@ const reset = () => {
 
 export default function Popup() {
   const input = useRef<HTMLTextAreaElement>(null)
+  const [isRunnerActive, setIsRunnerActive] = useState(false)
 
   const process = () => {
     sendMessage({ type: 'NOTIFY', message: __('notification.running_ai'), audio: 'next_step' })
     sendMessage({ type: 'PROMPT', prompt: input.current!.value })
   }
+
+  useEffect(() => {
+    // Check runner status on mount
+    chrome.storage.session.get('runnerActive').then((result) => {
+      setIsRunnerActive(!!result.runnerActive)
+    })
+
+    // Listen for storage changes
+    const handleStorageChange = (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      if (changes.runnerActive) {
+        setIsRunnerActive(!!changes.runnerActive.newValue)
+      }
+    }
+
+    chrome.storage.session.onChanged.addListener(handleStorageChange)
+
+    return () => {
+      chrome.storage.session.onChanged.removeListener(handleStorageChange)
+    }
+  }, [])
 
   return (
     <div class="min-w-64 m-4 grid gap-4">
@@ -31,7 +52,7 @@ export default function Popup() {
         rows={4}
       />
 
-      <SpeechRecognition input={input} process={process} auto />
+      <SpeechRecognition input={input} process={process} auto={!isRunnerActive} />
 
       <Button
         class="bg-green-500 on:bg-green-700"

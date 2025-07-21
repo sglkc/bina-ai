@@ -37,7 +37,7 @@ export async function handleMessage(msg: Message) {
       runner.run(msg)
       break
     case 'RESET-SESSION':
-      runner.session = undefined
+      await chrome.storage.session.remove('runnerSession')
       console.log('reseted session')
       break
     case 'NOTIFY':
@@ -74,4 +74,6 @@ export default defineBackground(() => {
       // if (import.meta.env.PROD)
       chrome.runtime.openOptionsPage()
   })
+
+  chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' })
 })
