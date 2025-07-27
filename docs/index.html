@@ -1,576 +1,283 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BINA AI - Asisten Digital untuk Tunanetra</title>
-    <meta name="description" content="Teknologi asistif inovatif yang membantu tunanetra mengakses internet dengan mudah melalui perintah suara dan kecerdasan buatan">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BINA AI - Asisten Digital untuk Tunanetra</title>
+  <meta name="theme-color" content="#F8F9FA" />
+  <meta property="title" content="BINA AI" />
+  <meta http-equiv="content-language" content="id" />
+  <meta property="description" content="Teknologi asistif inovatif yang membantu tunanetra mengakses internet dengan mudah melalui perintah suara dan kecerdasan buatan" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="BINA AI" />
+  <meta property="og:site_name" content="Blind-friendly Intelligent Navigation Assistant" />
+  <meta property="og:description" content="Teknologi asistif inovatif yang membantu tunanetra mengakses internet dengan mudah melalui perintah suara dan kecerdasan buatan" />
+  <meta property="og:image" content="https://sglkc.github.io/asobimashou/thumbnail.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://sglkc.github.io/asobimashou/" />
+  <meta property="twitter:title" content="BINA AI" />
+  <meta property="twitter:description" content="Teknologi asistif inovatif yang membantu tunanetra mengakses internet dengan mudah melalui perintah suara dan kecerdasan buatan" />
+  <meta property="twitter:image" content="https://sglkc.github.io/asobimashou/thumbnail.png" />
 
-    <style>
-        :root {
-            --color-text: #1a1a1a;
-            --color-text-secondary: #555;
-            --color-background: #ffffff;
-            --color-accent: #2563eb;
-            --color-accent-hover: #1d4ed8;
-            --color-success: #059669;
-            --color-border: #e5e7eb;
-            --color-section-bg: #f8fafc;
-            --color-card-bg: #ffffff;
-            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            --max-width: 1100px;
-            --spacing-xs: 0.25rem;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-            --spacing-2xl: 3rem;
-            --spacing-3xl: 4rem;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-family);
-            line-height: 1.6;
-            color: var(--color-text);
-            background-color: var(--color-background);
-            margin: 0;
-            padding: 0;
-            font-size: 18px;
-        }
-
-        .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 var(--spacing-lg);
-        }
-
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: var(--spacing-3xl) 0;
-            text-align: center;
-        }
-
-        header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin: 0 0 var(--spacing-lg) 0;
-            line-height: 1.1;
-        }
-
-        .subtitle {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin: 0 0 var(--spacing-xl) 0;
-            opacity: 0.95;
-            line-height: 1.4;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background-color: white;
-            color: var(--color-accent);
-            padding: var(--spacing-lg) var(--spacing-2xl);
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.125rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            color: var(--color-accent-hover);
-        }
-
-        .section {
-            padding: var(--spacing-3xl) 0;
-        }
-
-        .section:nth-child(even) {
-            background-color: var(--color-section-bg);
-        }
-
-        .section h2 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            text-align: center;
-            margin: 0 0 var(--spacing-2xl) 0;
-            color: var(--color-text);
-        }
-
-        .section h3 {
-            font-size: 1.75rem;
-            font-weight: 500;
-            margin: var(--spacing-2xl) 0 var(--spacing-lg) 0;
-            color: var(--color-text);
-        }
-
-        .video-container {
-            max-width: 800px;
-            margin: 0 auto var(--spacing-2xl) auto;
-            position: relative;
-            aspect-ratio: 16 / 9;
-            background-color: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .video-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-xl);
-            margin: var(--spacing-2xl) 0;
-        }
-
-        .benefit-card {
-            background-color: var(--color-card-bg);
-            padding: var(--spacing-xl);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid var(--color-border);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .benefit-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
-
-        .benefit-icon {
-            font-size: 3rem;
-            margin-bottom: var(--spacing-lg);
-            display: block;
-        }
-
-        .benefit-card h4 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 0 0 var(--spacing-md) 0;
-            color: var(--color-text);
-        }
-
-        .benefit-card p {
-            margin: 0;
-            color: var(--color-text-secondary);
-            line-height: 1.7;
-        }
-
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: var(--spacing-2xl) 0;
-            background-color: var(--color-card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .comparison-table th,
-        .comparison-table td {
-            padding: var(--spacing-lg);
-            text-align: left;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .comparison-table th {
-            background-color: var(--color-accent);
-            color: white;
-            font-weight: 600;
-        }
-
-        .comparison-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .comparison-table .check {
-            color: var(--color-success);
-            font-weight: 600;
-            font-size: 1.125rem;
-        }
-
-        .comparison-table .cross {
-            color: #dc2626;
-            font-weight: 600;
-            font-size: 1.125rem;
-        }
-
-        .text-large {
-            font-size: 1.25rem;
-            line-height: 1.7;
-            margin: var(--spacing-xl) 0;
-            color: var(--color-text-secondary);
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: var(--spacing-2xl);
-            border-radius: 12px;
-            margin: var(--spacing-2xl) 0;
-            text-align: center;
-        }
-
-        .highlight-box h3 {
-            color: white;
-            margin-top: 0;
-        }
-
-        .links-section {
-            background-color: var(--color-card-bg);
-            padding: var(--spacing-2xl);
-            border-radius: 12px;
-            border: 1px solid var(--color-border);
-            margin: var(--spacing-2xl) 0;
-        }
-
-        .links-section h4 {
-            margin: 0 0 var(--spacing-lg) 0;
-            color: var(--color-text);
-            font-size: 1.25rem;
-        }
-
-        .links-section a {
-            color: var(--color-accent);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .links-section a:hover {
-            text-decoration: underline;
-            color: var(--color-accent-hover);
-        }
-
-        .links-section p {
-            margin: var(--spacing-sm) 0;
-            line-height: 1.6;
-        }
-
-        footer {
-            background-color: var(--color-text);
-            color: white;
-            padding: var(--spacing-2xl) 0;
-            text-align: center;
-        }
-
-        footer a {
-            color: white;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                font-size: 16px;
-            }
-
-            header h1 {
-                font-size: 2.25rem;
-            }
-
-            .subtitle {
-                font-size: 1.25rem;
-            }
-
-            .section h2 {
-                font-size: 2rem;
-            }
-
-            .benefits-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .comparison-table {
-                font-size: 0.9rem;
-            }
-
-            .comparison-table th,
-            .comparison-table td {
-                padding: var(--spacing-md);
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            html {
-                scroll-behavior: auto;
-            }
-
-            .benefit-card,
-            .cta-button {
-                transition: none;
-            }
-        }
-    </style>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <header>
-        <div class="container">
-            <h1>BINA AI</h1>
-            <p class="subtitle">Asisten Digital Cerdas untuk Tunanetra</p>
-            <p style="font-size: 1.125rem; margin-bottom: 2rem; opacity: 0.9;">
-                Teknologi asistif revolusioner yang membantu penyandang tunanetra menjelajahi internet dengan mudah menggunakan perintah suara dan kecerdasan buatan
-            </p>
-            <a href="#demo" class="cta-button">Lihat Demo</a>
+  <header>
+    <div class="container">
+      <h1>BINA AI</h1>
+      <p class="subtitle">Asisten Digital Cerdas untuk Tunanetra</p>
+      <p class="header-description">
+        Teknologi asistif revolusioner yang membantu penyandang tunanetra menjelajahi internet dengan mudah menggunakan
+        perintah suara dan kecerdasan buatan
+      </p>
+      <a href="#demo" class="cta-button">Lihat Demo</a>
+    </div>
+  </header>
+
+  <section id="demo" class="section">
+    <div class="container">
+      <h2>Lihat BINA AI Beraksi</h2>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/" title="Demo BINA AI - Asisten Digital untuk Tunanetra"
+          allowfullscreen aria-label="Video demonstrasi penggunaan BINA AI">
+        </iframe>
+      </div>
+      <p class="text-large" style="text-align: center;">
+        Saksikan bagaimana BINA AI membantu pengguna tunanetra mengakses website, membaca artikel, mengisi formulir, dan
+        berbelanja online hanya dengan perintah suara.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Apa itu BINA AI?</h2>
+      <p class="text-large">
+        BINA AI adalah ekstensi browser yang dirancang khusus untuk membantu penyandang tunanetra mengakses internet
+        dengan lebih mudah dan mandiri. Beberapa fitur dan keunggulan BINA AI meliputi:
+      </p>
+
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <span class="benefit-icon">🎤</span>
+          <h4>Navigasi dengan Suara</h4>
+          <p>Cukup bicara untuk mengontrol - buka website, klik tombol, isi formulir, dan lakukan berbagai
+            aktivitas online tanpa perlu keyboard atau mouse.</p>
         </div>
-    </header>
 
-    <section id="demo" class="section">
-        <div class="container">
-            <h2>Lihat BINA AI Beraksi</h2>
-            <div class="video-container">
-                <iframe
-                    src="https://www.youtube.com/embed/"
-                    title="Demo BINA AI - Asisten Digital untuk Tunanetra"
-                    allowfullscreen
-                    aria-label="Video demonstrasi penggunaan BINA AI">
-                </iframe>
-            </div>
-            <p class="text-large" style="text-align: center;">
-                Saksikan bagaimana BINA AI membantu pengguna tunanetra mengakses website, membaca artikel, mengisi formulir, dan berbelanja online hanya dengan perintah suara.
-            </p>
+        <div class="benefit-card">
+          <span class="benefit-icon">🧠</span>
+          <h4>Pemahaman Konteks</h4>
+          <p>AI yang cerdas memahami maksud Anda dan memberikan bantuan yang tepat sesuai dengan apa yang sedang Anda
+            lakukan di website.</p>
         </div>
-    </section>
 
-    <section class="section">
-        <div class="container">
-            <h2>Apa itu BINA AI?</h2>
-            <p class="text-large">
-                BINA AI adalah ekstensi browser yang dirancang khusus untuk membantu penyandang tunanetra mengakses internet dengan lebih mudah dan mandiri. Dengan menggunakan teknologi kecerdasan buatan dan pengenalan suara, BINA AI memungkinkan Anda untuk:
-            </p>
-
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <span class="benefit-icon">🎤</span>
-                    <h4>Navigasi dengan Suara</h4>
-                    <p>Cukup bicara untuk mengontrol browser - buka website, klik tombol, isi formulir, dan lakukan berbagai aktivitas online tanpa perlu menyentuh keyboard atau mouse.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <span class="benefit-icon">🧠</span>
-                    <h4>Pemahaman Konteks</h4>
-                    <p>AI yang cerdas memahami maksud Anda dan memberikan bantuan yang tepat sesuai dengan apa yang sedang Anda lakukan di website.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <span class="benefit-icon">🔍</span>
-                    <h4>Penjelasan Otomatis</h4>
-                    <p>BINA AI secara otomatis menjelaskan isi halaman website, struktur menu, dan konten yang tersedia dengan bahasa yang mudah dipahami.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <span class="benefit-icon">⚡</span>
-                    <h4>Respon Cepat</h4>
-                    <p>Dapatkan bantuan instan tanpa menunggu lama. BINA AI merespons perintah Anda dengan cepat dan akurat.</p>
-                </div>
-            </div>
+        <div class="benefit-card">
+          <span class="benefit-icon">🔍</span>
+          <h4>Penjelasan Otomatis</h4>
+          <p>BINA AI secara otomatis menjelaskan isi halaman website, struktur menu, dan konten yang tersedia dengan
+            bahasa yang mudah dipahami.</p>
         </div>
-    </section>
 
-    <section class="section">
-        <div class="container">
-            <h2>Mengapa BINA AI Lebih Unggul?</h2>
-            <p class="text-large">
-                BINA AI menggabungkan kelebihan dari berbagai teknologi asistif yang sudah ada, sekaligus mengatasi kekurangan-kekurangan mereka:
-            </p>
-
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Fitur</th>
-                        <th>Screen Reader Tradisional</th>
-                        <th>Voice Assistant</th>
-                        <th>BINA AI</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Memahami konteks website</strong></td>
-                        <td><span class="cross">✗</span> Hanya membaca teks</td>
-                        <td><span class="cross">✗</span> Tidak terintegrasi dengan browser</td>
-                        <td><span class="check">✓</span> Memahami struktur dan makna halaman</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Perintah suara natural</strong></td>
-                        <td><span class="cross">✗</span> Menggunakan shortcut keyboard</td>
-                        <td><span class="check">✓</span> Ya, tapi terbatas</td>
-                        <td><span class="check">✓</span> Percakapan natural dan fleksibel</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Bantuan otomatis</strong></td>
-                        <td><span class="cross">✗</span> Perlu dikonfigurasi manual</td>
-                        <td><span class="cross">✗</span> Tidak khusus untuk web</td>
-                        <td><span class="check">✓</span> Otomatis menyesuaikan dengan website</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Kemudahan penggunaan</strong></td>
-                        <td><span class="cross">✗</span> Butuh pembelajaran mendalam</td>
-                        <td><span class="check">✓</span> Mudah, tapi fungsi terbatas</td>
-                        <td><span class="check">✓</span> Mudah dipelajari, fitur lengkap</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Akses e-commerce & form</strong></td>
-                        <td><span class="cross">✗</span> Sering mengalami kesulitan</td>
-                        <td><span class="cross">✗</span> Tidak bisa mengisi form web</td>
-                        <td><span class="check">✓</span> Dioptimalkan untuk transaksi online</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="benefit-card">
+          <span class="benefit-icon">⚡</span>
+          <h4>Respon Cepat</h4>
+          <p>Dapatkan bantuan instan tanpa menunggu lama. BINA AI merespons perintah Anda dengan cepat dan akurat.</p>
         </div>
-    </section>
 
-    <section class="section">
-        <div class="container">
-            <h2>Siapa yang Dapat Terbantu?</h2>
-
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <span class="benefit-icon">👥</span>
-                    <h4>Penyandang Tunanetra</h4>
-                    <p>Baik tunanetra sejak lahir maupun yang kehilangan penglihatan di kemudian hari dapat menggunakan BINA AI untuk mengakses internet dengan lebih mudah.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <span class="benefit-icon">👴</span>
-                    <h4>Lansia dengan Gangguan Penglihatan</h4>
-                    <p>Membantu lansia yang mengalami penurunan fungsi penglihatan untuk tetap dapat berinteraksi dengan teknologi digital.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <span class="benefit-icon">🎓</span>
-                    <h4>Siswa dan Mahasiswa</h4>
-                    <p>Mendukung proses pembelajaran online dan riset dengan akses yang lebih mudah ke materi pendidikan digital.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <span class="benefit-icon">💼</span>
-                    <h4>Profesional</h4>
-                    <p>Memungkinkan penyandang tunanetra untuk bekerja secara produktif dalam lingkungan digital yang semakin dominan.</p>
-                </div>
-            </div>
+        <div class="benefit-card">
+          <span class="benefit-icon">♿</span>
+          <h4>Pengembangan Kolaboratif</h4>
+          <p>Komunitas tunanetra turut berpartisipasi dalam pengembangan demi masukan yang netral.</p>
         </div>
-    </section>
 
-    <section class="section">
-        <div class="container">
-            <h2>Contoh Penggunaan Sehari-hari</h2>
-
-            <h3>🛒 Berbelanja Online</h3>
-            <p class="text-large">
-                "BINA, cari laptop gaming di toko online" → BINA AI akan membuka website e-commerce, mencari produk yang diminta, dan membantu Anda membandingkan harga serta spesifikasi.
-            </p>
-
-            <h3>📰 Membaca Berita</h3>
-            <p class="text-large">
-                "BINA, baca berita terbaru tentang teknologi" → BINA AI akan membuka portal berita, menemukan artikel yang relevan, dan membacakan ringkasan berita dengan suara yang jelas.
-            </p>
-
-            <h3>💰 Transaksi Perbankan</h3>
-            <p class="text-large">
-                "BINA, cek saldo rekening" → BINA AI membantu mengakses internet banking, mengisi formulir login dengan aman, dan membacakan informasi saldo Anda.
-            </p>
-
-            <h3>🎵 Hiburan</h3>
-            <p class="text-large">
-                "BINA, putar musik jazz" → BINA AI akan membuka platform streaming musik, mencari genre yang diminta, dan memulai pemutaran.
-            </p>
+        <div class="benefit-card">
+          <span class="benefit-icon">🇮🇩</span>
+          <h4>Inovasi Lokal</h4>
+          <p>BINA AI dikembangkan oleh pelajar Indonesia dengan fokus meraih kesetaraan digital
+            untuk Visi Indonesia Emas 2045.</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="container">
-            <div class="highlight-box">
-                <h3>Teknologi Asistif Berkualitas Tinggi</h3>
-                <p style="font-size: 1.125rem; margin: 0;">
-                    BINA AI dikembangkan dengan standar internasional untuk teknologi asistif dan telah mengantongi sertifikat hak cipta resmi. Kami berkomitmen untuk terus meningkatkan kualitas dan fitur demi kemudahan akses digital bagi penyandang tunanetra di Indonesia.
-                </p>
-            </div>
+  <section class="section">
+    <div class="container">
+      <h2>Mengapa BINA AI Lebih Unggul?</h2>
+      <p class="text-large">
+        BINA AI menggabungkan kelebihan dari berbagai teknologi asistif yang sudah ada, sekaligus mengatasi
+        kekurangan-kekurangan mereka:
+      </p>
 
-            <div class="links-section">
-                <h4>🔗 Informasi dan Sumber Daya</h4>
+      <div class="table-wrapper">
+        <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Fitur</th>
+            <th>BINA AI</th>
+            <th>Voice Assistant</th>
+            <th>Screen Reader</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Memahami konteks website</strong></td>
+            <td><span class="check">✓</span> Memahami struktur dan makna halaman</td>
+            <td><span class="cross">✗</span> Tidak terintegrasi dengan browser</td>
+            <td><span class="cross">✗</span> Hanya membaca teks</td>
+          </tr>
+          <tr>
+            <td><strong>Perintah suara natural</strong></td>
+            <td><span class="check">✓</span> Percakapan natural dan fleksibel</td>
+            <td><span class="check">✓</span> Ya, tapi terbatas</td>
+            <td><span class="cross">✗</span> Menggunakan shortcut keyboard</td>
+          </tr>
+          <tr>
+            <td><strong>Interaksi otomatis</strong></td>
+            <td><span class="check">✓</span> Otomatis menyesuaikan dengan website</td>
+            <td><span class="cross">✗</span> Hanya untuk beberapa aplikasi</td>
+            <td><span class="cross">✗</span> Perlu dikonfigurasi manual</td>
+          </tr>
+          <tr>
+            <td><strong>Kemudahan penggunaan</strong></td>
+            <td><span class="check">✓</span> Mudah dipelajari, fitur lengkap</td>
+            <td><span class="check">✓</span> Mudah, tapi fungsi terbatas</td>
+            <td><span class="cross">✗</span> Butuh pembelajaran mendalam</td>
+          </tr>
+          <tr>
+            <td><strong>Pemahaman visual</strong></td>
+            <td><span class="check">✓</span> Dapat mengerti gambar pada layar</td>
+            <td><span class="cross">✗</span> Tidak bisa membaca gambar</td>
+            <td><span class="cross">✗</span> Hanya jika ada alternate text</td>
+          </tr>
+          <tr>
+            <td><strong>Keterbukaan teknologi</strong></td>
+            <td><span class="check">✓</span> Terbuka dan dapat diakses secara percuma</td>
+            <td><span class="cross">✗</span> Sulit diatur bagi kalangan umum</td>
+            <td><span class="cross">✗</span> Hanya beberapa teknologi</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
 
-                <p><strong>Source Code & Pengembangan:</strong><br>
-                <a href="https://github.com/sglkc/bina-ai" target="_blank" rel="noopener">github.com/sglkc/bina-ai</a><br>
-                Akses kode sumber lengkap untuk developer dan peneliti yang ingin berkontribusi.</p>
+  <section class="section">
+    <div class="container">
+      <h2>Siapa yang Dapat Terbantu?</h2>
+      <p class="text-large">
+          Selain kalangan tunanetra, BINA AI juga bermanfaat bagi berbagai kalangan yang membutuhkan akses digital
+          yang lebih mudah dan inklusif. Berikut beberapa pengguna yang dapat terbantu:
+      </p>
 
-                <p><strong>Sertifikat Hak Cipta:</strong><br>
-                <a href="https://pdki-indonesia.dgip.go.id/link/454330303230323532363838307c636f70797269676874" target="_blank" rel="noopener">Lihat Sertifikat PDKI Indonesia</a><br>
-                Sertifikat resmi dari Direktorat Jenderal Kekayaan Intelektual Republik Indonesia.</p>
-
-                <p><strong>Dokumentasi Teknis:</strong><br>
-                <a href="dev.html">Panduan Developer</a><br>
-                Dokumentasi lengkap untuk instalasi, konfigurasi, dan pengembangan lebih lanjut.</p>
-            </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <span class="benefit-icon">👥</span>
+          <h4>Penyandang Tunanetra</h4>
+          <p>Baik kebutaan ringan hingga total dapat menggunakan BINA AI untuk mengakses internet dengan lebih mudah.</p>
         </div>
-    </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 BINA AI. Teknologi asistif untuk kehidupan digital yang lebih inklusif.</p>
-            <p>
-                <a href="https://github.com/sglkc/bina-ai">GitHub</a> •
-                <a href="https://pdki-indonesia.dgip.go.id/link/454330303230323532363838307c636f70797269676874">Sertifikat Hak Cipta</a> •
-                <a href="dev.html">Dokumentasi</a>
-            </p>
+        <div class="benefit-card">
+          <span class="benefit-icon">👴</span>
+          <h4>Lansia</h4>
+          <p>Membantu lansia yang mengalami penurunan fungsi motorik untuk tetap dapat berinteraksi dengan teknologi
+            digital.</p>
         </div>
-    </footer>
 
-    <script>
-        // Smooth scrolling untuk anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+        <div class="benefit-card">
+          <span class="benefit-icon">🎓</span>
+          <h4>Pelajar</h4>
+          <p>Mendukung proses pembelajaran online dan riset dengan akses yang lebih mudah ke materi pendidikan digital.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // Animasi card saat scroll (optional enhancement)
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+  <section class="section">
+    <div class="container">
+      <h2>Contoh Penggunaan Sehari-hari</h2>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
+      <h3>🔍 Pencarian Informasi</h3>
+      <p class="text-large">
+        "BINA, cari puskesmas terdekat di Bandung" → BINA AI akan membuka website Dinas Kesehatan, mencari daftar puskesmas,
+        dan menyampaikan semua lokasi serta detail puskesmas yang tersedia.
+      </p>
 
-        // Observe benefit cards untuk subtle animation
-        document.querySelectorAll('.benefit-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
-        });
-    </script>
+      <h3>📖 Menyimpulkan Website</h3>
+      <p class="text-large">
+        "BINA, apa yang bisa disimpulkan dari Wikipedia ini?" → BINA AI akan mengekstrak teks dari halaman website,
+        lalu menyimpulkan informasi penting seperti ringkasan, poin-poin utama, dan struktur artikel.
+      </p>
+
+      <h3>✏️ Alat Pembelajaran</h3>
+      <p class="text-large">
+        "BINA, tolong berikan saya pertanyaan dari materi di web ini" → BINA AI akan memahami isi halaman website
+        lalu membuat pertanyaan-pertanyaan yang relevan untuk membantu pembelajaran.
+      </p>
+
+      <h3>🧑‍🤝‍🧑 Teman Virtual</h3>
+      <p class="text-large">
+        "BINA, saya merasa sedih karena putus cinta" → BINA AI akan mencari artikel atau video yang relevan tentang
+        cara mengatasi patah hati, lalu membacakan ringkasan atau memberikan saran yang bermanfaat.
+      </p>
+
+      <h3>🎵 Hiburan</h3>
+      <p class="text-large">
+        "BINA, sarankan saya musik tahun 90an" → BINA AI akan membuka platform streaming musik, menyarankan judul,
+        dan memulai pemutaran musik.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="highlight-box">
+        <h3>Teknologi Asistif Inovatif</h3>
+        <p>
+          Pada tanggal 28 Februari 2025, BINA AI telah mengantongi sertifikat hak cipta yang tercatat
+            di Pangkalan Data Kekayaan Intelektual dengan Nomor Pencatatan 000866863. Sertifikat dapat
+            diakses pada tautan di bawah ini.
+        </p>
+      </div>
+
+      <div class="links-section">
+        <h4>🔗 Informasi dan Sumber Daya</h4>
+
+        <p><strong>Source Code & Pengembangan:</strong><br>
+          <a href="https://github.com/sglkc/bina-ai" target="_blank" rel="noopener">github.com/sglkc/bina-ai</a><br>
+          Akses kode sumber lengkap untuk developer dan peneliti yang ingin berkontribusi.
+        </p>
+
+        <p><strong>Sertifikat Hak Cipta:</strong><br>
+          <a href="https://pdki-indonesia.dgip.go.id/link/454330303230323532363838307c636f70797269676874"
+            target="_blank" rel="noopener">Lihat Sertifikat PDKI Indonesia</a><br>
+          Sertifikat resmi dari Direktorat Jenderal Kekayaan Intelektual Republik Indonesia.
+        </p>
+
+        <p><strong>Dokumentasi Teknis:</strong><br>
+          <a href="dev.html">Panduan Developer</a><br>
+          Dokumentasi lengkap untuk instalasi, konfigurasi, dan pengembangan lebih lanjut.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 BINA AI. Teknologi asistif untuk kehidupan digital yang lebih inklusif.</p>
+      <p>
+        <a href="https://github.com/sglkc/bina-ai">GitHub</a> •
+        <a href="https://pdki-indonesia.dgip.go.id/link/454330303230323532363838307c636f70797269676874">Sertifikat Hak
+          Cipta</a> •
+        <a href="dev.html">Dokumentasi</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
+
 </html>
