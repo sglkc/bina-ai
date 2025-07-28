@@ -1,4 +1,5 @@
 /* ===== BINA AI - Accessible Design System ===== */
+@import url('./fonts.css');
 
 :root {
   /* Enhanced Color Palette - WCAG AA Compliant */
@@ -16,7 +17,9 @@
   --color-error: #dc2626;
 
   /* Typography Scale */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-family: 'Ubuntu', sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-bold: 500;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -68,6 +71,7 @@ html {
 
 body {
   font-family: var(--font-family);
+  font-weight: var(--font-weight-normal);
   line-height: 1.6;
   color: var(--color-text);
   background-color: var(--color-background);
@@ -374,7 +378,7 @@ header h1 {
 .comparison-table th {
   background-color: var(--color-primary);
   color: white;
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-base);
   position: sticky;
   top: 0;
@@ -391,14 +395,14 @@ header h1 {
 
 .comparison-table .check {
   color: var(--color-accent);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-2xl);
   line-height: 1;
 }
 
 .comparison-table .cross {
   color: var(--color-error);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-2xl);
   line-height: 1;
 }
@@ -469,7 +473,7 @@ header h1 {
   color: white;
   margin-top: 0;
   font-size: var(--font-size-2xl);
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
 }
 
 .highlight-box p {
@@ -492,13 +496,13 @@ header h1 {
   margin: 0 0 var(--spacing-6) 0;
   color: var(--color-text);
   font-size: var(--font-size-xl);
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
 }
 
 .links-section a {
   color: var(--color-primary);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: var(--font-weight-normal);
   border-bottom: 1px solid transparent;
   transition: all 0.2s ease;
 }
